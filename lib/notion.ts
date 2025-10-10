@@ -33,7 +33,8 @@ const getNavigationLinkPages = pMemoize(
             signFileUrls: false
           }),
         {
-          concurrency: 4
+          // 降低并发数以符合 Notion API 速率限制（每秒 3 个请求）
+          concurrency: 2
         }
       )
     }
