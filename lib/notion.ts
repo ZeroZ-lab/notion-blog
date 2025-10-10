@@ -44,7 +44,10 @@ const getNavigationLinkPages = pMemoize(
 )
 
 export async function getPage(pageId: string): Promise<ExtendedRecordMap> {
-  let recordMap = await notion.getPage(pageId)
+  // 使用 gotOptions 来控制并发和超时，减少 Notion API 速率限制错误
+  let recordMap = await notion.getPage(pageId, {
+    concurrency: 2 // 限制并发请求数以符合 Notion API 速率限制
+  })
 
   if (navigationStyle !== 'default') {
     // ensure that any pages linked to in the custom navigation header have
