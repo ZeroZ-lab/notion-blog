@@ -186,3 +186,58 @@ export function getTotalPages(): number {
   const allPosts = getAllPosts()
   return Math.ceil(allPosts.length / POSTS_PER_PAGE)
 }
+
+// 计算搜索相关度评分
+function calculateRelevanceScore(post: Post, query: string): number {
+  const lowerQuery = query.toLowerCase()
+  let score = 0
+
+  // 标题匹配：100 分
+  if (post.title.toLowerCase().includes(lowerQuery)) {
+    score += 100
+  }
+
+  // 描述匹配：50 分
+  if (post.description.toLowerCase().includes(lowerQuery)) {
+    score += 50
+  }
+
+  // 标签匹配：30 分
+  if (post.tags.some((tag) => tag.toLowerCase().includes(lowerQuery))) {
+    score += 30
+  }
+
+  // 分类匹配：30 分
+  if (post.category.toLowerCase().includes(lowerQuery)) {
+    score += 30
+  }
+
+  // 内容匹配：10 分
+  if (post.content.toLowerCase().includes(lowerQuery)) {
+    score += 10
+  }
+
+  return score
+}
+
+// 搜索文章
+export function searchPosts(query: string): Post[] {
+  if (!query || query.trim() === '') {
+    return []
+  }
+
+  const allPosts = getAllPosts()
+  const lowerQuery = query.toLowerCase().trim()
+
+  // 过滤并评分
+  const results = allPosts
+    .map((post) => ({
+      post,
+      score: calculateRelevanceScore(post, lowerQuery)
+    }))
+    .filter((result) => result.score > 0)
+    .toSorted((a, b) => b.score - a.score)
+    .map((result) => result.post)
+
+  return results
+}
