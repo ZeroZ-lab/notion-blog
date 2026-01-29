@@ -12,10 +12,10 @@ export function extractToc(html: string): TocItem[] {
     let match
 
     while ((match = headingRegex.exec(html)) !== null) {
-        const level = parseInt(match[1] || '2', 10)
+        const level = Number.parseInt(match[1] || '2', 10)
         const existingId = match[2] || ''
         const rawText = match[3] || ''
-        const text = rawText.replace(/<[^>]*>/g, '').trim() // 移除内部 HTML 标签
+        const text = rawText.replaceAll(/<[^>]*>/g, '').trim() // 移除内部 HTML 标签
 
         // 生成 ID（如果没有的话）
         const id = existingId || slugify(text)
@@ -32,9 +32,9 @@ export function extractToc(html: string): TocItem[] {
 function slugify(text: string): string {
     return text
         .toLowerCase()
-        .replace(/[^\w\u4e00-\u9fa5\s-]/g, '') // 保留中文、字母、数字、空格和连字符
-        .replace(/\s+/g, '-')
-        .replace(/-+/g, '-')
+        .replaceAll(/[^\w\u4E00-\u9FA5\s-]/g, '') // 保留中文、字母、数字、空格和连字符
+        .replaceAll(/\s+/g, '-')
+        .replaceAll(/-+/g, '-')
         .trim()
 }
 
@@ -42,13 +42,13 @@ function slugify(text: string): string {
 export function addHeadingIds(html: string): string {
     const headingRegex = /<h([2-4])([^>]*)>(.*?)<\/h([2-4])>/gi
 
-    return html.replace(headingRegex, (match, level, attrs, content, closeLevel) => {
+    return html.replaceAll(headingRegex, (match, level, attrs, content, closeLevel) => {
         // 检查是否已有 id
         if (attrs.includes('id="')) {
             return match
         }
 
-        const text = content.replace(/<[^>]*>/g, '').trim()
+        const text = content.replaceAll(/<[^>]*>/g, '').trim()
         const id = slugify(text)
 
         return `<h${level}${attrs} id="${id}">${content}</h${closeLevel}>`

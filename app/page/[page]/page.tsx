@@ -1,5 +1,5 @@
-import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 
 import { HeroSection } from '@/components/hero-section'
 import { Pagination } from '@/components/pagination'
@@ -21,7 +21,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
     const { page } = await params
-    const pageNumber = parseInt(page, 10)
+    const pageNumber = Number.parseInt(page, 10)
 
     return {
         title: `文章列表 - 第 ${pageNumber} 页`,
@@ -31,11 +31,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function PaginatedPage({ params }: PageProps) {
     const { page } = await params
-    const pageNumber = parseInt(page, 10)
+    const pageNumber = Number.parseInt(page, 10)
     const totalPages = getTotalPages()
 
     // 验证页码
-    if (isNaN(pageNumber) || pageNumber < 1 || pageNumber > totalPages) {
+    if (Number.isNaN(pageNumber) || pageNumber < 1 || pageNumber > totalPages) {
         notFound()
     }
 

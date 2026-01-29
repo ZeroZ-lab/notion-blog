@@ -1,8 +1,9 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { cn } from '@/lib/utils'
+
 import type { TocItem } from '@/lib/toc'
+import { cn } from '@/lib/utils'
 
 interface TableOfContentsProps {
     items: TocItem[]
@@ -17,11 +18,11 @@ export function TableOfContents({ items }: TableOfContentsProps) {
 
         const observer = new IntersectionObserver(
             (entries) => {
-                entries.forEach((entry) => {
+                for (const entry of entries) {
                     if (entry.isIntersecting) {
                         setActiveId(entry.target.id)
                     }
-                })
+                }
             },
             {
                 rootMargin: '-80px 0px -80% 0px',
@@ -30,12 +31,12 @@ export function TableOfContents({ items }: TableOfContentsProps) {
         )
 
         // 观察所有标题元素
-        items.forEach((item) => {
+        for (const item of items) {
             const element = document.getElementById(item.id)
             if (element) {
                 observer.observe(element)
             }
-        })
+        }
 
         return () => observer.disconnect()
     }, [items])

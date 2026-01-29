@@ -9,12 +9,13 @@
  *   pnpm tsx scripts/export-notion.ts --about      # 仅导出根页面介绍内容
  */
 
+import * as fs from 'node:fs'
+import * as http from 'node:http'
+import * as https from 'node:https'
+import * as path from 'node:path'
+
 import { Client } from '@notionhq/client'
 import { NotionToMarkdown } from 'notion-to-md'
-import * as fs from 'fs'
-import * as path from 'path'
-import * as https from 'https'
-import * as http from 'http'
 
 // 配置
 const ROOT_PAGE_ID = '5c4795ad65e44db78b4921266107302e' // 从 site.config.ts
@@ -88,10 +89,10 @@ const n2m = new NotionToMarkdown({ notionClient: notion })
 function generateSlug(title: string, pageId?: string): string {
   // 清理标题：移除特殊字符，保留中文、英文、数字
   let slug = title
-    .replace(/[""'']/g, '') // 移除引号
-    .replace(/[^\w\s\u4e00-\u9fa5-]/g, '') // 保留中文、英文、数字、连字符
-    .replace(/\s+/g, '-') // 空格替换为连字符
-    .replace(/-+/g, '-') // 合并多个连字符
+    .replaceAll(/[""'']/g, '') // 移除引号
+    .replaceAll(/[^\w\s\u4E00-\u9FA5-]/g, '') // 保留中文、英文、数字、连字符
+    .replaceAll(/\s+/g, '-') // 空格替换为连字符
+    .replaceAll(/-+/g, '-') // 合并多个连字符
     .trim()
 
   // 限制长度（避免文件名过长）
@@ -101,7 +102,7 @@ function generateSlug(title: string, pageId?: string): string {
 
   // 如果 slug 为空或是 untitled，使用 pageId 的前 8 位
   if (!slug || slug === 'untitled') {
-    slug = pageId ? `post-${pageId.replace(/-/g, '').slice(0, 8)}` : `post-${Date.now()}`
+    slug = pageId ? `post-${pageId.replaceAll('-', '').slice(0, 8)}` : `post-${Date.now()}`
   }
 
   return slug
@@ -146,7 +147,7 @@ async function extractTitleFromNotionBlocks(pageId: string): Promise<string> {
         break // 只检查第一个段落
       }
     }
-  } catch (error) {
+  } catch {
     console.warn('  ⚠️ 无法从 blocks 提取标题')
   }
 
@@ -172,8 +173,8 @@ function extractTitleFromContent(markdown: string): string {
   }
 
   // 尝试从第一行非空文本提取
-  const lines = markdown.split('\n').filter((line) => line.trim())
-  const firstLine = lines[0]
+  const line_ = markdown.split('\n').find((line) => line.trim())
+  const firstLine = line_
   if (firstLine) {
     const cleanedLine = firstLine.replace(/^[#*_\->\s]+/, '').trim()
     if (cleanedLine.length > 0) {
@@ -231,7 +232,7 @@ async function downloadImage(
       resolve(null)
     })
 
-    request.setTimeout(30000, () => {
+    request.setTimeout(30_000, () => {
       request.destroy()
       resolve(null)
     })
@@ -339,9 +340,9 @@ async function getPageProperties(pageId: string): Promise<{
 // 获取子页面列表（支持递归）
 async function getChildPages(
   pageId: string,
-  recursive: boolean = false,
-  depth: number = 0,
-  maxDepth: number = 3
+  recursive = false,
+  depth = 0,
+  maxDepth = 3
 ): Promise<Array<{ id: string; title: string; depth: number }>> {
   if (depth > maxDepth) {
     console.log(`  ⚠️ 已达到最大深度 (${maxDepth})，跳过更深层页面`)
@@ -466,7 +467,7 @@ async function processImages(
 }
 
 // 导出单个页面
-async function exportPage(pageId: string, depth: number = 0): Promise<void> {
+async function exportPage(pageId: string, depth = 0): Promise<void> {
   try {
     const props = await getPageProperties(pageId)
 
@@ -520,8 +521,8 @@ async function exportPage(pageId: string, depth: number = 0): Promise<void> {
     // depth > 0 的页面是子页面，不在首页列表中展示
     const listed = depth === 0
     const frontmatter = `---
-title: "${title.replace(/"/g, '\\"')}"
-description: "${props.description.replace(/"/g, '\\"')}"
+title: "${title.replaceAll('"', '\\"')}"
+description: "${props.description.replaceAll('"', '\\"')}"
 date: "${props.date}"
 category: "${props.category}"
 tags: [${props.tags.map((t) => `"${t}"`).join(', ')}]
@@ -535,8 +536,8 @@ published: true${coverPath ? `\ncover: "${coverPath}"` : ''}${!listed ? `\nliste
     fs.writeFileSync(outputPath, frontmatter + markdown, 'utf-8')
 
     console.log(`  ✅ 已保存: ${outputPath}`)
-  } catch (error) {
-    console.error(`  ❌ 导出失败: ${error}`)
+  } catch (err) {
+    console.error(`  ❌ 导出失败: ${err}`)
   }
 }
 
@@ -599,8 +600,8 @@ async function exportAboutContent(): Promise<void> {
     console.log(`     标题: ${aboutData.title}`)
     console.log(`     简介: ${aboutData.bio.slice(0, 100)}...`)
     console.log(`     头像: ${aboutData.avatar || '无'}`)
-  } catch (error) {
-    console.error('  ❌ 导出介绍内容失败:', error)
+  } catch (err) {
+    console.error('  ❌ 导出介绍内容失败:', err)
   }
 }
 
@@ -613,7 +614,7 @@ async function main() {
   const recursive = args.includes('--recursive') || args.includes('-r')
   const aboutOnly = args.includes('--about')
   const maxDepthArg = args.find(arg => arg.startsWith('--max-depth='))
-  const maxDepth = maxDepthArg ? parseInt(maxDepthArg.split('=')[1] ?? '3', 10) : 3
+  const maxDepth = maxDepthArg ? Number.parseInt(maxDepthArg.split('=')[1] ?? '3', 10) : 3
 
   if (recursive) {
     console.log(`📂 递归模式已启用 (最大深度: ${maxDepth})`)
@@ -662,9 +663,9 @@ async function main() {
         return acc
       }, {} as Record<number, number>)
 
-      Object.entries(depthCounts).forEach(([depth, count]) => {
+      for (const [depth, count] of Object.entries(depthCounts)) {
         console.log(`   深度 ${depth}: ${count} 个页面`)
-      })
+      }
     }
 
     // 导出每个页面
@@ -681,8 +682,8 @@ async function main() {
     console.log(`   文章目录: ${OUTPUT_DIR}`)
     console.log(`   图片目录: ${IMAGES_DIR}`)
     console.log(`   总计导出: ${exportedPages.size} 篇文章`)
-  } catch (error) {
-    console.error('\n❌ 导出过程中出错:', error)
+  } catch (err) {
+    console.error('\n❌ 导出过程中出错:', err)
     process.exit(1)
   }
 }

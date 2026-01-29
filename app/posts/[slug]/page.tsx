@@ -1,12 +1,11 @@
 import { formatDistanceToNow } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
 import Image from 'next/image'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import { TableOfContents } from '@/components/table-of-contents'
 import { getAllPosts, getPostBySlug, getPostBySlugWithHtml } from '@/lib/posts'
-import { extractToc, addHeadingIds } from '@/lib/toc'
+import { addHeadingIds,extractToc } from '@/lib/toc'
 
 interface PostPageProps {
   params: Promise<{ slug: string }>
