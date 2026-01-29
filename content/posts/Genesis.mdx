@@ -1,0 +1,278 @@
+---
+title: "Genesis"
+description: ""
+date: "2024-12-19"
+category: "未分类"
+tags: ["3D"]
+published: true
+listed: false
+---
+
+
+![e679d5b662753f97ece0fd8b0d3eab26.jpg](/images/posts/Genesis/image-1.jpg)
+
+
+Genesis is a comprehensive physics simulation platform designed for general purpose _Robotics_, _Embodied AI_, & _Physical AI_ applications. It is simultaneously multiple things:
+
+- A **universal physics engine** re-built from the ground up, capable of simulating a wide range of materials and physical phenomena.
+- A **lightweight**, **ultra-fast**, **pythonic**, and **user-friendly** robotics simulation platform.
+- A powerful and fast **photo-realistic rendering** system.
+- A **generative data engine** that transforms user-prompted natural language description into various modalities of data.
+
+Powered by a universal physics engine re-designed and re-built from the ground up, Genesis integrates various physics solvers and their coupling into a unified framework. This core physics engine is further enhanced by a generative agent framework that operates at an upper level, aiming towards fully automated data generation for robotics and beyond. Our generative framework aims to automate generating data including the following modalities:
+
+- Physically-accurate & spatially consistent videos
+- Camera motion & parameters
+- Human and animal character motion
+- Robotic manipulation & locomotion policy, deployable to real-world
+- Fully interactive 3D scene
+- Open-world articulated object generation
+- Speech audio, facial animation & emotion
+
+Currently, we are open-sourcing the underlying physics engine and the simulation platform. Access to the generative framework will be rolled out gradually in the near future.
+
+
+This webpage serves as a gallery showcasing different capabilities of the Genesis platform. Please refer to our [documentation site ](https://genesis-world.readthedocs.io/en/latest/index.html) to for detailed installation steps, tutorials and API references.
+
+
+## Optimized Performance
+
+
+Genesis is a highly-optimized physics engine that leverages GPU-accelerated parallel computation, with features like optimized collision checking, auto-hibernation, contact island, etc. Genesis delivers an unprecedented simulation speed in various scenes.
+
+
+When simulating a manipulation scene (with a single plane and a Franka arm), Genesis runs at 43 millision FPS, which is 430,000 times faster than in real time.
+
+
+In large-scale simulation, Genesis utilizied auto-hibernation to speed up simulation of entities that are in converged and static states. (This feature is under testing and will be release in version 0.1.1).
+
+
+[speed.mp4](https://genesis-embodied-ai.github.io/videos/speed.mp4)
+
+
+Speed comparison with popular CPU and GPU-based robotics simulator.
+
+
+## Generating 4D dynamical & physical world
+
+
+Genesis's physics engine is empowered by a VLM-based generated agent that uses the APIs provided by the simulation infrastructure as tools to create 4D dynamic worlds, which can then be used as a foundational data source for extracting various modalities of data. Together with modules for generating camera and object motion, we are able to generate physically-accurate and view-consistent videos and other modalities of data.
+
+
+[physical.mp4](https://genesis-embodied-ai.github.io/videos/physical.mp4)
+
+
+## Character Motion Generation
+
+
+[wukong.mp4](https://genesis-embodied-ai.github.io/videos/wukong.mp4)
+
+
+"_A miniature Wukong holding a stick in his hand sprints across a table surface for 3 seconds, then jumps into the air, and swings his right arm downward during landing. The camera begins with a close-up of his face, then steadily follows the character while gradually zooming out. When the monkey leaps into the air, at the highest point of the jump, the motion pauses for a few seconds. The camera circles around the character for 360 degrees, and slowly ascends, before the action resumes._"
+
+
+[boxing.mp4](https://genesis-embodied-ai.github.io/videos/boxing.mp4)
+
+
+"_A Japanese samurai performs boxing._"
+
+
+[dance.mp4](https://genesis-embodied-ai.github.io/videos/dance.mp4)
+
+
+"_A Chinese soldier performs the Gangnam Style dance._"
+
+
+[zombie.mp4](https://genesis-embodied-ai.github.io/videos/zombie.mp4)
+
+
+"_A Roman soldier walks forward like a zombie._"
+
+
+## Robotic Policy Generation
+
+
+Genesis aims to use generative robotic agent and physics engine to automatically generate robotic policies and demonstration data for various skills under different scenarios. For the high-level motivation and more details behind the module, see [RoboGen](https://robogen-ai.github.io/) and our upcoming paper.
+
+
+[corn.mp4](https://genesis-embodied-ai.github.io/videos/manipulation/corn.mp4)
+
+
+"_A mobile franka arm heats the corn with the bowl and the microwave._"
+
+
+[throw.mp4](https://genesis-embodied-ai.github.io/videos/manipulation/throw.mp4)
+
+
+"_A mobile franka arm throws all the objects on the floor into the basket._"
+
+
+[book.mp4](https://genesis-embodied-ai.github.io/videos/manipulation/book.mp4)
+
+
+"_A mobile franka arm re-organizes the books on the table by pushing the brown and the white books to align with the red one._"
+
+
+[drone_flip.mp4](https://genesis-embodied-ai.github.io/videos/drone_flip.mp4)
+
+
+"_A fleet of 24 drones (arranged in 4x6) take off together from the ground and perform a flip together._"
+
+
+[rainy_dog_rainTrue.mp4](https://genesis-embodied-ai.github.io/videos/locomotion/quadraped/rainy_dog_rainTrue.mp4)
+
+
+"_A Unitree Go2 Quadraped runs under the rain._" (**Sim**)
+
+
+[h1_hop.mp4](https://genesis-embodied-ai.github.io/videos/locomotion/humanoid/h1_hop.mp4)
+
+
+"_A Unitree H1 humanoid performs single-foot hopping._" (**Sim**, because our robot is broken :( )
+
+
+[h1-2_walk.mp4](https://genesis-embodied-ai.github.io/videos/locomotion/humanoid/h1-2_walk.mp4)
+
+
+"_A Unitree H1-2 humanoid walks forward._" (**Sim2Real**)
+
+
+[leaphand_walk.mp4](https://genesis-embodied-ai.github.io/videos/locomotion/dexhand/leaphand_walk.mp4)
+
+
+"_A robotic leap hand walks forward like a quadrapad using its all four fingers._" (**Sim**)
+
+
+[shadowhand_walk.mp4](https://genesis-embodied-ai.github.io/videos/locomotion/dexhand/shadowhand_walk.mp4)
+
+
+"_A robotic shadow hand walks forward like a human using only its index and middle fingers._" (**Sim**)
+
+
+[gaits.mp4](https://genesis-embodied-ai.github.io/videos/locomotion/quadraped/gaits.mp4)
+
+
+Quadraped locomotion with various gaits (**Sim2Real**)
+
+
+[diagonal_hopping.mp4](https://genesis-embodied-ai.github.io/videos/locomotion/quadraped/diagonal_hopping.mp4)
+
+
+Quadraped 2-feet hopping (**Sim2Real**)
+
+
+[handstand.mp4](https://genesis-embodied-ai.github.io/videos/locomotion/quadraped/handstand.mp4)
+
+
+"_Quadraped performs handstand with its 2 front legs._" (**Sim2Real**)
+
+
+[traverse.mp4](https://genesis-embodied-ai.github.io/videos/locomotion/quadraped/traverse.mp4)
+
+
+Quadraped locomotion with various base heights (**Sim2Real**)
+
+
+## More Sim2Real Policy Transfer
+
+
+[locomanipulation.mp4](https://genesis-embodied-ai.github.io/videos/locomanipulation.mp4)
+
+
+Loco-manipulation of large & underactuated objects
+
+
+[backflip.mp4](https://genesis-embodied-ai.github.io/videos/locomotion/quadraped/backflip.mp4)
+
+
+Quadraped single-backflip
+
+
+[double_backflip.mp4](https://genesis-embodied-ai.github.io/videos/locomotion/quadraped/double_backflip.mp4)
+
+
+Quadraped double-backflip
+
+
+## 3D & Fully Interactive Scene Generation
+
+
+[house.mp4](https://genesis-embodied-ai.github.io/videos/scene/house.mp4)
+
+
+"_A home interior scene with a living room (including a dinning space), a restroom, a study and a bedroom._"
+
+
+[restaurant.mp4](https://genesis-embodied-ai.github.io/videos/scene/restaurant.mp4)
+
+
+"_A restaurant interior._"
+
+
+## Open-world Articulated Object Generation
+
+
+[articulated.mp4](https://genesis-embodied-ai.github.io/videos/articulated.mp4)
+
+
+We generate articulated of open-set mesh assets, extending beyond categories contained in human-annotated articulated object asset. For more details, see our upcoming paper (under submission now).
+
+
+## Soft Robot
+
+
+Genesis can simulate generated soft or hybrid (soft skin and rigid skeleton) robot. To get started, check [tutorial](https://genesis-world.readthedocs.io/en/latest/user_guide/getting_started/soft_robots.html).
+
+
+[worm.mp4](https://genesis-embodied-ai.github.io/videos/soft_robot/worm.mp4)
+
+
+Worm (MPM muscle).
+
+
+[teapot.mp4](https://genesis-embodied-ai.github.io/videos/soft_robot/teapot.mp4)
+
+
+"_A walking teapot._" (hybrid))
+
+
+[diffusebot_gripper.mp4](https://genesis-embodied-ai.github.io/videos/soft_robot/diffusebot_gripper.mp4)
+
+
+"_A gripper that can rotate a box._", attached to a UR5. (MPM + rigid)
+
+
+[soft_gripper_nav_pick.mp4](https://genesis-embodied-ai.github.io/videos/soft_robot/soft_gripper_nav_pick.mp4)
+
+
+A soft gripper navigates a box and picks up a pen cap. (MPM + rigid)
+
+
+## Speech Audio, Facial Animation & Emotion Generation
+
+
+[facial_single.mp4](https://genesis-embodied-ai.github.io/videos/facial_single.mp4)
+
+
+"_Facial animation and speech of the text [Genesis is a physical platform designed for general purpose Robotics/Embodied AI/Physical AI applications]. Emotion transitions from neutral to angry, then to happy_".
+
+
+[facial_mix.mp4](https://genesis-embodied-ai.github.io/videos/facial_mix.mp4)
+
+
+Generalize across different facial characters and emotions
+
+
+## BibTeX
+
+
+```plain text
+@software{Genesis,
+          author = {Genesis Authors},
+          title = {Genesis: A Universal and Generative Physics Engine for Robotics and Beyond},
+          month = {December},
+          year = {2024},
+          url = {https://github.com/Genesis-Embodied-AI/Genesis}
+        }
+```
+

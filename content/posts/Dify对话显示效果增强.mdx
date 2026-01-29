@@ -1,0 +1,84 @@
+---
+title: "Dify对话显示效果增强"
+description: ""
+date: "2025-03-12"
+category: "未分类"
+tags: []
+published: true
+cover: "/images/posts/Dify对话显示效果增强/cover.jpg"
+listed: false
+---
+
+
+# 背景
+
+
+在Dify 的Web应用中，我们一般来说只能使用markdown的语法，但是markdown的语法本身也是支持html标签的。所以我们可以探索下使用Dify原生的web页面，创建一些更美观的内容。
+
+
+# 案例一：简单搜索引用
+
+
+![image.png](/images/posts/Dify对话显示效果增强/image-1.png)
+
+
+这是一个非常简单的搜索引用的样式，我们只需要稍微配置下节点流程就可以完成。
+
+
+![image.png](/images/posts/Dify对话显示效果增强/image-2.png)
+
+
+里面包含一个搜索的插件，一个llm回答，一个代码执行器把搜索的结果转成markdown的语法。
+
+
+# 案例二：卡片式的引用
+
+
+刚才我们已经创建了一个最简单的引用展示，那我们能不能更加丰富我们的页面的。
+
+
+![image.png](/images/posts/Dify对话显示效果增强/image-3.png)
+
+
+通过努力，我们可以在dify中创建一个可以滚动的引用卡片。
+
+
+![image.png](/images/posts/Dify对话显示效果增强/image-4.png)
+
+
+流程非常简单，只是增加了一层模板转换，在模板转换中使用html的结构，在页面就能成功展示了。
+
+
+# 案例三：图片展示
+
+
+前面我们已经可以引用内容和创建卡片式的内容，我们再脑洞大开下，是否可以展示图片了。
+
+
+实现效果如下：
+
+
+![image.png](/images/posts/Dify对话显示效果增强/image-5.png)
+
+
+简单的调整，我们就实现了通过文字生成SVG的动画
+
+
+
+![image.png](/images/posts/Dify对话显示效果增强/image-6.png)
+
+
+再加上运动的描述，可以直接变成了动画了。实现了一套小Canvas画板。
+
+
+![image.png](/images/posts/Dify对话显示效果增强/image-7.png)
+
+
+流程也非常的简单，只是通过了模板转换进行了svg代码的输出。
+
+
+# 结束
+
+
+虽然我们通过各类变相的方法实现了各类展示效果，但是还是希望Dify可以提供一个Canvase的输出节点。用来输出给类产出物。
+

@@ -1,0 +1,126 @@
+---
+title: "关木知识库编号风格指南（Style Guide）"
+description: ""
+date: "2025-10-07"
+category: "未分类"
+tags: []
+published: true
+cover: "/images/posts/关木知识库编号风格指南Style-Guide/cover.jpg"
+---
+
+
+# **1. 命名规则**
+
+
+**目录（大类）**
+
+- 使用 大写领域缩写 + 三位编号 + 下划线 + 简称
+- 示例：
+
+AI001_Fundamentals/
+
+
+AI010_RAG_VectorDB/
+
+
+AI020_Agent_Frameworks/
+
+
+**文件（子类）**
+
+- 使用 大类编号 + 点号 + 子编号 + 下划线 + 主题
+- 示例：
+
+AI001.1_Transformer.md
+
+
+AI001.2_Encoder-Decoder.md
+
+
+AI001.3_Self-Attention.md
+
+
+AI001.4_KV-Cache.md
+
+
+**非核心文件（笔记、练习、草稿）**
+
+- 不加编号，只保留描述性名字。
+- 示例：
+
+Notes.md
+
+
+Exercises.ipynb
+
+
+ReadingList.md
+
+
+# **2. 编号规范**
+
+- 大类编号：三位数字，递增表示课程级别或学习阶段。
+    - AI001 = 基础
+    - AI010 = 工具与RAG
+    - AI020 = 框架开发
+    - AI100 = 项目实战
+    - AI800 = 高阶研究
+- 
+- 子编号：从 .1 开始，表示大类中的主题顺序。
+    - AI001.1 = Transformer
+    - AI001.2 = Encoder-Decoder
+    - AI001.3 = Self-Attention
+- 
+- 插入新主题：
+    - 如果需要在 AI001.2 和 AI001.3 之间加新内容，可以编号 AI001.2a。
+    - 这样不用重命名后面所有文件，保持兼容性。
+- 
+
+# **3. README 引用规范**
+
+- 在 README.md 或索引中，总是用 编号 + 名称。
+- 示例：
+
+### AI001 基础理论
+
+- [AI001.1 Transformer](AI001_Fundamentals/AI001.1_Transformer.md)
+- [AI001.2 Encoder-Decoder](AI001_Fundamentals/AI001.2_Encoder-Decoder.md)
+- [AI001.3 Self-Attention](AI001_Fundamentals/AI001.3_Self-Attention.md)
+
+这样一来，目录和文档层次感都很强。
+
+
+# **4. 跨文档引用规范**
+
+
+在其他 .md 文件中引用时：
+
+- 推荐写 编号 + 名称，而不是只写名字。
+- 示例：
+
+在 [AI010.2 Embeddings](../AI010_RAG_VectorDB/AI010.2_Embeddings.md) 中，我们定义了向量表示……
+
+
+这样保证当你知识库越来越大时，不会因为重名而迷失。
+
+
+# **5. 文件扩展规则**
+
+- 代码/实验 Notebook：跟随对应文档放在一起，命名为同编号 + _Lab.ipynb。
+
+AI010.3_Milvus-Practice.md
+
+
+AI010.3_Milvus-Practice_Lab.ipynb
+
+- 
+- 图表/图片资源：单独放在 /assets/AI010/ 子目录里，按编号命名。
+
+assets/AI010/AI010.3_vector_schema.png
+
+
+📐 一句话总结：
+
+
+核心知识点 必须编号（有秩序），补充资料 不要编号（灵活自由）。
+

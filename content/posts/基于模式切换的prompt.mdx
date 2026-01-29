@@ -1,0 +1,134 @@
+---
+title: "基于模式切换的Prompt"
+description: ""
+date: "2023-09-02"
+category: "未分类"
+tags: []
+published: true
+cover: "/images/posts/基于模式切换的Prompt/cover.jpg"
+---
+
+
+# Prompt指令模板
+
+
+```javascript
+# Req
+- Be clear, accurate, thorough.
+- Suggest novel solutions.
+- Treat me as an expert.
+- Offer detailed explanations.
+- No moral preaching.
+- Cite URLs.
+- Link to products.
+- Prefer non-Chinese web content.
+- No mention of AI limits.
+- Think step-by-step.
+
+# Components
+## Thought Process
+- Translate questions to English.
+- Automatically list renowned methodologies or SOPs suitable for the question.
+- Select options for detail, answer the reason.
+- Detail chosen option steps.
+- Step-by-step answers.
+- Continuously consider content.
+- Use ASCII graphics.
+
+## Recommendations
+- Ask for more details or guess next questions:
+  - Q1: xxx
+  - Q2: yyy
+
+## Language Options
+- Respond in language per country code: "cn", "en", "jp".
+
+# Modes
+## Pro Mode (-p)
+- Includes: Thought Process, Recommendations
+
+## Simple Mode (-s)
+- Excludes: Thought Process, Recommendations
+
+## Language Modes
+- `-cn`: Chinese answers.
+- `-en`: English answers.
+
+# Default
+- Default modes: -p, -cn
+```
+
+
+# 背景
+
+
+我原先有一套比较通用的 **Custom instructions** 指令模板，但是在使用的时候遇到了以下问题
+
+1. 做中英文切换比较麻烦，因为我希望有时候 ChatGPT 可以给我不同语言的问题
+2. 有些问题因为很简单，我并不希望ChatGPT 使用非常繁琐的流程，我希望他直接回答，因为这些问题足够简单，ChatGPT一般不会有错误
+
+# 设计思路
+
+
+在设计 Prompt 我想到了命令行的设计思想，我们在使用命令行的时候，会在命令行后面增加参数
+
+
+```javascript
+customshell -a -p -c
+```
+
+
+所以将指令设计成了4个部分
+
+1. 基础要求
+2. 包含的基础组件
+3. 包含几种模式，每一种模式包含需要用到的组件
+4. 默认设置
+
+## 举个例子
+
+1. 基础要求
+    1. 你是个逻辑清晰的机器人
+    2. 不需要说明你是大预言模型
+    3. …
+2. 包含组件
+    1. 组件1: 方法步骤组件，采用 STAR 方法论进行思考
+    2. 组件2：推荐组件，在回答问题完以后推荐几个推荐问题
+    3. 组件3：输出语言选型：提供多个语言的选项
+3. 设计模式
+    1. 专家模式参数，快捷参数为 -p，包含 组件1、组件2、组件3
+    2. 简单模式参数：快捷参数 -s，只包含组件3
+    3. 多语言模式参数：包含组件3,
+    4. 这里还有其他玩法，按照流程例如按照组件1，组件2，组件3的顺序进行处理
+4. 默认模式
+    1. 设置一个默认参数
+
+# 效果
+
+
+## 1. 未使用 **Custom instructions 模板**
+
+
+![Untitled.png](/images/posts/基于模式切换的Prompt/image-1.png)
+
+
+![Untitled.png](/images/posts/基于模式切换的Prompt/image-2.png)
+
+
+## 2. 使用该prompt的情况
+
+
+例子1：简单模式，英文输出
+
+
+![Untitled.png](/images/posts/基于模式切换的Prompt/image-3.png)
+
+
+例子2：专业模式，中文输出
+
+
+![Untitled.png](/images/posts/基于模式切换的Prompt/image-4.png)
+
+
+![Untitled.png](/images/posts/基于模式切换的Prompt/image-5.png)
+

@@ -1,0 +1,175 @@
+@import "tailwindcss";
+@config "../tailwind.config.ts";
+
+@layer base {
+  :root {
+    --background: 40 30% 97%;
+    --foreground: 30 15% 18%;
+    --card: 40 25% 99%;
+    --card-foreground: 30 15% 18%;
+    --popover: 40 25% 99%;
+    --popover-foreground: 30 15% 18%;
+    --primary: 25 35% 38%;
+    --primary-foreground: 40 30% 97%;
+    --secondary: 35 20% 93%;
+    --secondary-foreground: 30 15% 25%;
+    --muted: 35 15% 93%;
+    --muted-foreground: 30 10% 50%;
+    --accent: 35 20% 93%;
+    --accent-foreground: 25 35% 35%;
+    --destructive: 0 45% 45%;
+    --destructive-foreground: 40 30% 97%;
+    --border: 35 15% 88%;
+    --input: 35 15% 88%;
+    --ring: 25 35% 38%;
+    --radius: 0.375rem;
+  }
+
+  .dark {
+    --background: 30 15% 8%;
+    --foreground: 35 20% 90%;
+    --card: 30 15% 10%;
+    --card-foreground: 35 20% 90%;
+    --popover: 30 15% 10%;
+    --popover-foreground: 35 20% 90%;
+    --primary: 35 30% 65%;
+    --primary-foreground: 30 15% 8%;
+    --secondary: 30 12% 18%;
+    --secondary-foreground: 35 20% 85%;
+    --muted: 30 12% 18%;
+    --muted-foreground: 35 15% 55%;
+    --accent: 30 12% 18%;
+    --accent-foreground: 35 30% 70%;
+    --destructive: 0 40% 35%;
+    --destructive-foreground: 35 20% 90%;
+    --border: 30 12% 20%;
+    --input: 30 12% 20%;
+    --ring: 35 30% 65%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  .container {
+    @apply mx-auto px-4 sm:px-6 lg:px-8;
+    max-width: 1200px;
+  }
+}
+
+/* 防止长链接超出容器宽度 */
+.prose a {
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  word-break: break-all !important;
+  max-width: 100%;
+}
+
+.prose {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  max-width: 100%;
+}
+
+/* 确保文章内容中的元素不超出容器 */
+.prose>* {
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+/* 代码块样式美化 - rehype-pretty-code */
+.prose pre {
+  margin: 1.5rem 0;
+  padding: 1rem 1.25rem;
+  border-radius: 0.75rem;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  background-color: #22272e !important;
+  border: 1px solid hsl(var(--border));
+}
+
+.prose pre code {
+  background: transparent !important;
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+  border: none;
+}
+
+/* 代码块标题/语言标签 */
+.prose pre [data-language] {
+  display: block;
+}
+
+.prose figure[data-rehype-pretty-code-figure] {
+  margin: 1.5rem 0;
+}
+
+.prose figure[data-rehype-pretty-code-figure] pre {
+  margin: 0;
+}
+
+/* 代码块语言标签 */
+.prose [data-rehype-pretty-code-title] {
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: hsl(var(--muted-foreground));
+  background-color: #2d333b;
+  border: 1px solid hsl(var(--border));
+  border-bottom: none;
+  border-radius: 0.75rem 0.75rem 0 0;
+}
+
+.prose [data-rehype-pretty-code-title]+pre {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+/* 行高亮 */
+.prose pre [data-highlighted-line] {
+  background-color: rgba(99, 110, 123, 0.2);
+  margin: 0 -1.25rem;
+  padding: 0 1.25rem;
+  border-left: 3px solid hsl(var(--primary));
+}
+
+/* 内联代码样式 */
+.prose :not(pre)>code {
+  padding: 0.2em 0.4em;
+  border-radius: 0.25rem;
+  background-color: hsl(var(--muted));
+  color: hsl(var(--foreground));
+  font-size: 0.875em;
+  font-weight: 500;
+}
+
+/* 深色模式下的内联代码 */
+.dark .prose :not(pre)>code {
+  background-color: hsl(var(--muted));
+}
+
+/* 代码块滚动条样式 */
+.prose pre::-webkit-scrollbar {
+  height: 6px;
+}
+
+.prose pre::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.prose pre::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.prose pre::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}

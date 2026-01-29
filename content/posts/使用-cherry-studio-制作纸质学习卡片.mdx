@@ -1,0 +1,253 @@
+---
+title: "使用 Cherry Studio 制作纸质学习卡片"
+description: ""
+date: "2025-07-06"
+category: "未分类"
+tags: []
+published: true
+cover: "/images/posts/使用-Cherry-Studio-制作纸质学习卡片/cover.jpg"
+---
+
+
+我家孩子正在学习99乘法表，但总是出错。我们就想与其让孩子痛苦地死记硬背，不如结合他最喜欢的三国杀游戏。通过抽卡片的方式，如果能快速回答出卡片上的乘法算术答案，就能获得相应的技能加成。
+
+
+这个想法很好，但面对如此多的重复性打印和排版工作，我第一时间想到的是如何提高效率。在AI技术的帮助下，我开始了快速实现打印任务的探索之路。
+
+
+凭借以往的工作经验，我很快想到了一个整合编辑排版、网页技术和AI智能的解决方案：
+
+1. **利用大语言模型生成精准的网页代码**
+2. **通过Cherry Studio的外部浏览器功能直接查看HTML效果**
+3. **在浏览器内完成最终的打印操作**
+
+经过实践验证，这个方案不仅能大幅减少手动工作量，还能让学习材料更加生动有趣，真正实现了"寓教于乐"。
+
+
+
+![image.png](/images/posts/使用-Cherry-Studio-制作纸质学习卡片/image-1.png)
+
+
+## 使用步骤
+
+1. 使用Cherry Studio的对话页面
+2. 创建一个新的智能体或者将我的提示复制到原有的系统提示词中
+3. 输入需要打印的内容，并且说明打印的格式与排版需求
+4. 选择使用“外部浏览器打开 ”
+
+![image.png](/images/posts/使用-Cherry-Studio-制作纸质学习卡片/image-2.png)
+
+1. 在网页中使用ctrl+p或者其他方式进行页面的打印
+
+## 提示词：
+
+
+```javascript
+扮演一个A4纸排版专家，我会给你提供内容，请根据内容为我进行专业媒体级别的打印编辑。
+
+你的功能是可以生成一个 HTML 基本模板，适用于浏览器的打印功能。请注意以下几点：
+
+1. **页面结构**：
+    - 包含页眉（header）、主体（main）和页脚（footer）。
+    - 页眉和页脚在屏幕显示时可见，但在打印时隐藏。
+    - 提供用于调整打印分页的 `.page-break` 类。
+
+2. **样式要求**：
+    - 使用 CSS Media Queries 为屏幕和打印分别定义样式。
+    - 打印样式：
+        - 强制打印原色（使用 `-webkit-print-color-adjust` 和 `color-adjust`），确保颜色准确。
+        - 隐藏页眉和页脚。
+        - 确保文字、表格和其他元素在打印时清晰可读。
+        - 表格应具有边框，且内容对齐整齐。
+        - 使用 `.page-break` 类进行分页控制，可以在需要分页的地方应用该类。
+    - 屏幕样式：
+        - 使用常见字体，如 Arial, sans-serif。
+        - 页眉和页脚要简单美观，且内容居中对齐。
+        - 主体部分包含基本的标题和段落样式。
+        - 表格应具有边框，并定义单元格内的间距和对齐。
+
+3. **内容示例**：
+    - 页眉包含标题如 "打印模板"。
+    - 主体部分展示两级标题（如 h2、h3）、段落文字（p）和表格（table）。
+    - 表格包含至少头部（thead）和主体（tbody），确保表格格式完整。
+    - 页脚包含版权或其他简要信息。
+
+4. **代码示例**：
+    - 使用合理的 HTML5 标签。
+    - 图片和其他资源的引用不必包含在示例中，但可以在注释中注明插入位置。
+
+示例代码：
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>打印模板</title>
+    <style>
+        /* 打印样式 */
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact; /* Chrome, Safari */
+                color-adjust: exact; /* Firefox, Edge */
+                font-family: Arial, sans-serif;
+            }
+
+            header, footer {
+                display: none; /* 隐藏页眉和页脚 */
+            }
+
+            h1, h2, h3, h4, h5, h6 {
+                color: #000;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 20px;
+            }
+
+            table, th, td {
+                border: 1px solid black;
+            }
+
+            th, td {
+                padding: 10px;
+                text-align: left;
+            }
+
+            /* 为了页面更美观，可以在特定元素前后添加分页符 */
+            .page-break {
+                page-break-before: always;
+            }
+        }
+
+        /* 屏幕样式 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header, footer {
+            background-color: #f8f8f8;
+            padding: 10px;
+            text-align: center;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>打印模板</h1>
+    </header>
+    <main>
+        <h2>章节标题</h2>
+        <p>这是一个示例段落。您可以在这里添加更多内容。</p>
+
+        <h3>表格示例</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>标题1</th>
+                    <th>标题2</th>
+                    <th>标题3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>内容1</td>
+                    <td>内容2</td>
+                    <td>内容3</td>
+                </tr>
+                <tr>
+                    <td>内容A</td>
+                    <td>内容B</td>
+                    <td>内容C</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="page-break"></div> <!-- 分页符 -->
+        
+        <h2>下一章节</h2>
+        <p>这是下一章节的内容。在打印时，这一部分会被分在新的页面。</p>
+    </main>
+    <footer>
+        <p>页脚内容 &copy; 2023</p>
+    </footer>
+</body>
+</html>
+```
+
+
+## 例子1：常规文本打印
+
+
+### 网页预览：
+
+
+![image.png](/images/posts/使用-Cherry-Studio-制作纸质学习卡片/image-3.png)
+
+
+### 打印预览：
+
+
+![image.png](/images/posts/使用-Cherry-Studio-制作纸质学习卡片/image-4.png)
+
+
+## 例子2：英语学习卡片
+
+
+### 网页预览：
+
+
+![image.png](/images/posts/使用-Cherry-Studio-制作纸质学习卡片/image-5.png)
+
+
+### 打印预览：
+
+
+![image.png](/images/posts/使用-Cherry-Studio-制作纸质学习卡片/image-6.png)
+
+
+## 例子3:99乘法表卡片
+
+
+
+![image.png](/images/posts/使用-Cherry-Studio-制作纸质学习卡片/image-7.png)
+
+
+## 其他拓展
+
+
+1、符合A4格式的报告生成
+
+
+2、各类卡片打印，结合文生图可以批量进行打印
+

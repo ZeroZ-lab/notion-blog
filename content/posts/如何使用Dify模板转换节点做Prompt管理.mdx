@@ -1,0 +1,183 @@
+---
+title: "如何使用Dify模板转换节点做Prompt管理"
+description: ""
+date: "2025-08-04"
+category: "未分类"
+tags: []
+published: true
+cover: "/images/posts/如何使用Dify模板转换节点做Prompt管理/cover.jpg"
+listed: false
+---
+
+
+在搭建AI工作流时，Prompt的使用是一个关键环节。
+
+
+这部分常常被工程背景的开发人员所忽略。
+
+
+虽然Dify本身没有提供Prompt的专属管理功能，但我们完全可以利用模板转换节点来实现这一目标。
+
+
+## 为什么选择模板转换节点？
+
+1. 节点具有入参和出参，可以对Prompt Template进行扩展
+2. 支持纯文本编写，不像代码节点那样需要编程
+3. 可以结合会话变量、环境变量和上游节点，拓展各类prompt的组合能力
+4. 一份Prompt可以在多个LLM节点中复用，也可以将多个Prompt组合使用
+
+## 一些示例:
+
+
+### **示例1：简单的文本模板**
+
+
+![image.png](/images/posts/如何使用Dify模板转换节点做Prompt管理/image-1.png)
+
+
+这是一个最简单的里，Prompt通过模板进行管理
+
+
+![image.png](/images/posts/如何使用Dify模板转换节点做Prompt管理/image-2.png)
+
+
+将变量通过Jinja2语法插入到模板中，就可以在LLM节点复用了。
+
+
+![image.png](/images/posts/如何使用Dify模板转换节点做Prompt管理/image-3.png)
+
+
+最后，一个简单示例就完成了。
+
+
+![image.png](/images/posts/如何使用Dify模板转换节点做Prompt管理/image-4.png)
+
+
+### **示例2：一份Prompt 模板多个LLM节点使用**
+
+
+在一个工作流中，我们可能需要走不同的LLM节点，这个时候，我们就可以公用一份节点。
+
+
+![image.png](/images/posts/如何使用Dify模板转换节点做Prompt管理/image-5.png)
+
+
+上面的工作流通过并行的方式运行LLM节点，同时保证Prompt相同。
+
+
+**适合的场景：**
+
+1. 快速调试多个模型
+2. 多个模型不同参数的对比
+
+![image.png](/images/posts/如何使用Dify模板转换节点做Prompt管理/image-6.png)
+
+
+### **示例3：一份Prompt 模板多个LLM节点使用**
+
+
+我们可以并发使用LLM节点，我们自然也可以结合if-else等节点，通过条件调用不同的LLM，同时只需要维护一个Prompt
+
+
+![image.png](/images/posts/如何使用Dify模板转换节点做Prompt管理/image-7.png)
+
+
+这样，我们就可以通过一些判断节点，分流不同任务到不同的LLM节点。
+
+
+这里的判断条件可以是入参、环境变量、会话变量等。
+
+
+![image.png](/images/posts/如何使用Dify模板转换节点做Prompt管理/image-8.png)
+
+
+### **示例4：多份Prompt 模板在一个LLM中使用**
+
+
+没有Prompt管理的时候，我们会将Prompt在节点中信息都在LLM节点编写。
+
+
+如果我们增加了几个功能，可能导致LLM节点中的Prompt混乱，这个时候我们可以通过将功能与Prompt内聚的方式进行管理。
+
+
+![image.png](/images/posts/如何使用Dify模板转换节点做Prompt管理/image-9.png)
+
+
+在这个例子中：
+
+1. 背景介绍的Prompt主要是介绍了当前用户的名字
+2. 获取时间的Prompt主要是返回了当前的时间。
+3. 在LLM节点，我们只要将提示词进行整合就可以了。
+
+![image.png](/images/posts/如何使用Dify模板转换节点做Prompt管理/image-10.png)
+
+
+### **示例5：动态组合Prompt模板在一个LLM中使用**
+
+
+![image.png](/images/posts/如何使用Dify模板转换节点做Prompt管理/image-11.png)
+
+
+针对不同的使用类型，我们希望能够复用一些提示词。例如我希望新增和修改合同的步骤不一样，但是要求是一样。
+
+
+首先，我们先撰写相同部分：
+
+
+
+![image.png](/images/posts/如何使用Dify模板转换节点做Prompt管理/image-12.png)
+
+
+接着我们撰写不同类型任务针对的不同Prompt
+
+
+例如新增合同的步骤：
+
+
+![image.png](/images/posts/如何使用Dify模板转换节点做Prompt管理/image-13.png)
+
+
+再增加修改合同的步骤：
+
+
+![image.png](/images/posts/如何使用Dify模板转换节点做Prompt管理/image-14.png)
+
+
+最后，我们将Prompt 进行整合
+
+
+
+![image.png](/images/posts/如何使用Dify模板转换节点做Prompt管理/image-15.png)
+
+
+最后，我们进行调试：
+
+
+![image.png](/images/posts/如何使用Dify模板转换节点做Prompt管理/image-16.png)
+
+
+我们通过动态的方式搭建了一个动态Prompt 的工作流。
+
+
+### **示例6：Prompt动态生成嵌套使用**
+
+
+这是一种更高阶的用户，各个提示词不仅可以在LLM节点汇聚，也可以在模板节点进行组合嵌套。
+
+
+我们可以
+
+1. 将提示词的构建封装成Dify的工具，Prompt也需要工程。
+2. 动态的组合，可以嵌套、可以平级、也可有有逻辑。
+3. 基于Jinja2语法，代码可以实现的组合判断都能实现
+
+## 总结：
+
+
+通过模板转换节点可以方便的帮我们进行Prompt 的管理，但是他同时也带来了很多问题
+
+1. Prompt的组合和拼接会带来性能问题，需要平衡收益。
+2. 调试节点会增多，可能会对调试造成困扰
+
+每一种方案都有利弊，重要的是权衡。
+

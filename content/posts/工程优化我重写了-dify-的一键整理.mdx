@@ -1,0 +1,291 @@
+---
+title: "【工程优化】我重写了 Dify 的“一键整理”"
+description: ""
+date: "2025-11-03"
+category: "未分类"
+tags: []
+published: true
+cover: "/images/posts/工程优化我重写了-Dify-的一键整理/cover.jpg"
+---
+
+
+## 一、问题的起点：当布局失去结构意识
+
+
+在早期的 Dify 工作流编辑器中，“一键整理”是个让人又爱又恨的功能——
+
+
+它能让节点自动排布整齐，却常常在复杂场景下“越整理越乱”。尤其当一个工作流膨胀到几十甚至上百个节点时，Dagre 的表现开始失控。
+
+
+其实，这并算是一个 Bug，而是Dagre 不符合工作流日益增长的现状。
+
+
+Dagre 的算法本质上是为中小型、层次化的有向图（DAG）设计的，它擅长把树状结构压成二维层级。但当图中出现循环、嵌套、子图容器、交叉依赖等复杂逻辑时，它的布局假设被破坏，整体排列就会失去“语义的稳定性”。
+
+
+于是我意识到：
+
+
+---
+
+
+## 二、算法的边界：Dagre 能做什么，不能做什么
+
+
+Dagre 的设计哲学是“确定性 + 简洁性”。它基于 Graphlib 图模型，将所有节点按照 rank（层级）分组，通过线性优化算法最小化边交叉与节点偏移。它的典型特征包括：
+
+
+| 特性              | 说明       | 优势       | 局限           |
+| --------------- | -------- | -------- | ------------ |
+| Layered Layout  | 按拓扑排序分层  | 结构清晰、可预测 | 无法处理环路与复杂嵌套  |
+| Rankdir (TB/LR) | 控制方向     | 简单易用     | 缺乏自适应能力      |
+| 固定 Node Size    | 假设节点尺寸固定 | 快速布局     | 不支持动态尺寸与容器节点 |
+
+
+在 Dify 早期版本中，Dagre 一度完美解决了 5~10 个节点的布局需求。但当规模超过 30 个节点后，**“整齐”变成了幻觉**：
+
+- 子图（Loop、Iteration）内部节点被挤压；
+- 多层嵌套时位置漂移；
+- 边路径交错，语义层级被破坏。
+
+因此，用户开始抱怨“一键整理没用”，而我意识到：我们可能需要一个更优的解法**。**
+
+
+---
+
+
+## 三、也许可以试试 ELK
+
+
+我决定从“让图变整齐”转向“让系统变可读”。这就是从 Dagre 到 ELK 的转折点：我开始意识到布局并不仅仅是画面的问题，而是逻辑关系的映射问题。
+
+
+ELK（Eclipse Layout Kernel）并不仅仅是一个图布局库，它更像是一种结构化思维工具。
+
+
+它把图形排布分成多个可控制的维度：算法层负责整体走向，约束层控制间距与边线，语义层负责表达节点间的逻辑含义。
+
+
+这种方式让开发者可以更精细地定义“什么重要”、“谁先谁后”。
+
+
+这一转变意味着：
+
+> 我不再让算法决定形态，而是让思想决定结构。
+
+![CleanShot_2025-11-03_at_16.31.11.png](/images/posts/工程优化我重写了-Dify-的一键整理/image-1.png)
+
+
+---
+
+
+## 四、ELK 的体系
+
+
+ELK 的底层架构分为三个层次：
+
+1. **算法层（Algorithm Layer）**：定义布局范式，如 `layered`, `force`, `radial`, `mrtree` 等。
+2. **约束层（Constraint Layer）**：通过参数表达语义，如 `elk.spacing.nodeNode`, `elk.edgeRouting`, `elk.alignment`。
+3. **语义层（Semantic Layer）**：你可以在节点元数据中表达逻辑关系，例如子图、分组、优先级、依赖方向。
+
+它不像 Dagre 那样“一次排好”，而是允许我构建一个**可演化的秩序生成器**。我可以针对不同类型的子结构使用不同算法：
+
+
+```typescript
+const elkOptions = {
+  'elk.algorithm': 'layered',
+  'elk.layered.spacing.nodeNodeBetweenLayers': '100',
+  'elk.spacing.nodeNode': '80',
+}
+```
+
+
+或者在循环子图中用 `force`，在主干用 `layered`：
+
+
+```typescript
+layout.algorithm = isLoop ? 'force' : 'layered'
+```
+
+
+这让“整理”变成一种**结构理解**的过程，而非几何调整。
+
+
+---
+
+
+## 五、代码层解读
+
+
+我的核心逻辑在 `useWorkflowOrganize` 这个 Hook 中实现。
+
+
+```typescript
+const handleLayout = useCallback(async () => {
+  const { getNodes, edges, setNodes } = store.getState()
+  const nodes = getNodes()
+
+  // Step 1: 子图（Loop / Iteration）内部单独布局
+  const childLayouts = await Promise.all(
+    nodes.filter(isLoopOrIteration).map(node => getLayoutForChildNodes(node.id, nodes, edges))
+  )
+
+  // Step 2: 动态调整容器尺寸
+  updateContainerSize(childLayouts)
+
+  // Step 3: 主图布局
+  const layout = await getLayoutByELK(nodes, edges)
+
+  // Step 4: 对齐层级中心
+  alignByLayer(layout)
+
+  // Step 5: 更新并同步历史
+  setNodes(layoutedNodes)
+  saveStateToHistory(WorkflowHistoryEvent.LayoutOrganize)
+}, [])
+```
+
+
+## 六、实现深析：ELK 布局栈的结构思想
+
+
+在迁移过程中，我重写了整个布局栈，让 `Dagre` 的调用保持兼容，但底层全面替换为 `ELK` 的 layered 布局。
+
+
+### 1. ROOT 层（主图布局）
+
+
+核心参数定义在 `ROOT_LAYOUT_OPTIONS`：
+
+
+```typescript
+const ROOT_LAYOUT_OPTIONS = {
+  'elk.algorithm': 'layered',
+  'elk.direction': 'RIGHT',
+  'elk.layered.spacing.nodeNodeBetweenLayers': '100',
+  'elk.spacing.nodeNode': '80',
+  'elk.edgeRouting': 'SPLINES',
+  'elk.layered.nodePlacement.strategy': 'NETWORK_SIMPLEX',
+  'elk.layered.crossingMinimization.strategy': 'LAYER_SWEEP',
+  'elk.layered.thoroughness': '10',
+  'elk.separateConnectedComponents': 'true',
+  'elk.hierarchyHandling': 'INCLUDE_CHILDREN',
+}
+```
+
+
+这层定义了系统级的走向、连线方式与分层逻辑。
+
+
+### 2. CHILD 层（子图递归布局）
+
+
+每个循环或迭代节点都会调用：
+
+
+```typescript
+const CHILD_LAYOUT_OPTIONS = {
+  'elk.algorithm': 'layered',
+  'elk.direction': 'RIGHT',
+  'elk.spacing.nodeNode': '60',
+  'elk.edgeRouting': 'SPLINES',
+  'elk.layered.thoroughness': '10',
+  'elk.hierarchyHandling': 'INCLUDE_CHILDREN',
+}
+```
+
+
+以保证嵌套结构能在独立空间中自洽展开。
+
+
+### 3. If-Else 分支：语义端口化
+
+
+对于条件节点（IfElseNode），我使用 ELK 的 **port** 机制来替代虚拟节点。这是从几何思维走向语义思维的关键转折。
+
+
+**Port（端口）** 是 ELK 在“节点级别的连接点”抽象：
+
+- 节点（Node）是容器；**边（Edge）并不是直接连到节点本体**，而是连到节点上的“端口（Port）”；
+- 每个 Port 定义了“放在哪个边”（side）、“在该边的顺序”（index）；
+- 它是布局算法在“多出口场景”中保持秩序的锚点。
+
+```typescript
+const ports = sortedChildEdges.map((edge, index) => ({
+	id: `${ifElseNode.id}-port-${edge.sourceHandle ?? index}`,
+	layoutOptions: {
+		'port.side': 'EAST',
+		'port.index': String(index),
+	},
+}))
+```
+
+
+然后，边（edge）不再直接连接节点，而是连接具体端口：
+
+
+```javascript
+elkEdges.push({
+	id: `edge-${index}`,
+	sources: [edge.source],
+	targets: [edge.target],
+	sourcePort: `${ifElseNode.id}-port-${edge.sourceHandle ?? index}`,
+})
+```
+
+
+在节点级设置：
+
+
+```javascript
+'elk.portConstraints': 'FIXED_ORDER'
+```
+
+
+这样可以确保：
+
+- 分支顺序与 UI 保持一致；
+- 交叉显著减少；
+- 省去“虚拟节点”的维护成本。
+
+---
+
+
+## 七、ELK 的哲学
+
+
+ELK 的哲学，要从 **三个问题** 出发：
+
+1. 你的图想表达什么？（逻辑层）
+2. 图中的“重力中心”是什么？（语义层）
+3. 哪些约束决定了美观？（几何层）
+
+学习顺序应是：
+
+
+| 学习层次 | 问题         | 对应 ELK 概念   | 建议实践                              |
+| ---- | ---------- | ----------- | --------------------------------- |
+| 结构逻辑 | 图想表达什么     | algorithm   | 试验不同算法（layered, force, radial）    |
+| 语义关系 | 节点的优先/依赖关系 | constraints | 调整 `elk.spacing`, `elk.direction` |
+| 表达方式 | 布局的视觉节奏    | rendering   | 结合 ReactFlow / canvas 动态调整        |
+
+
+不要追求“最整齐的布局”，而是要寻找“最能表达系统逻辑的布局”。
+
+
+Dagre 是确定性的——它相信世界有唯一的最优排列。
+
+
+ELK 是开放的——它相信世界可以在张力中达成平衡。
+
+
+所以我从 Dagre 迁移到 ELK。我的解决方案也从“怎么排得好看”，变成：
+
+> “系统是否在空间中表达了它的逻辑与意图？”
+
+# 八、尾声
+
+
+也许“一键整理”永远不会完美，但它在不断逼近的，不是最优解，而是我对 workflow 一种理解**。**
+

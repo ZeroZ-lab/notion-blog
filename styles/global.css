@@ -60,3 +60,28 @@ body {
 ::-webkit-scrollbar-track {           
     background-color: var(--bg-color);
 }
+
+/* 防止长链接超出容器宽度 */
+.prose a,
+.prose code,
+.prose pre {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.prose a {
+  max-width: 100%;
+  display: inline;
+}
+
+/* 确保所有内容不超出容器 */
+.prose {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+.prose * {
+  max-width: 100%;
+}
+
