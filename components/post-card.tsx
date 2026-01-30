@@ -5,6 +5,13 @@ import Link from 'next/link'
 
 import type { Post } from '@/lib/posts'
 
+function encodeImagePath(path: string): string {
+  return path
+    .split('/')
+    .map((segment) => encodeURIComponent(segment))
+    .join('/')
+}
+
 interface PostCardProps {
   post: Post
 }
@@ -18,7 +25,7 @@ export function PostCard({ post }: PostCardProps) {
           <Link href={`/posts/${post.slug}`} className="flex-shrink-0">
             <div className="relative w-40 h-24 overflow-hidden rounded-md bg-muted">
               <Image
-                src={post.cover}
+                src={encodeImagePath(post.cover)}
                 alt={post.title}
                 fill
                 className="object-cover transition-transform duration-300 group-hover:scale-105"

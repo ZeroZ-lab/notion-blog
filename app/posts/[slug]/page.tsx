@@ -7,6 +7,13 @@ import { TableOfContents } from '@/components/table-of-contents'
 import { getAllPosts, getPostBySlug, getPostBySlugWithHtml } from '@/lib/posts'
 import { addHeadingIds,extractToc } from '@/lib/toc'
 
+function encodeImagePath(path: string): string {
+  return path
+    .split('/')
+    .map((segment) => encodeURIComponent(segment))
+    .join('/')
+}
+
 interface PostPageProps {
   params: Promise<{ slug: string }>
 }
@@ -54,7 +61,7 @@ export default async function PostPage({ params }: PostPageProps) {
         {post.cover && (
           <div className="relative w-full aspect-[2/1] mb-8 overflow-hidden rounded-lg bg-muted">
             <Image
-              src={post.cover}
+              src={encodeImagePath(post.cover)}
               alt={post.title}
               fill
               className="object-cover"
