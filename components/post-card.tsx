@@ -30,6 +30,7 @@ export function PostCard({ post }: PostCardProps) {
                 fill
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
                 sizes="160px"
+                unoptimized
               />
             </div>
           </Link>
