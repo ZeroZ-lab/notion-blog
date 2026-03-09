@@ -2,7 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 import matter from 'gray-matter'
-import rehypePrettyCode from 'rehype-pretty-code'
+import rehypePrettyCodePlugin from 'rehype-pretty-code'
 import rehypeStringify from 'rehype-stringify'
 import remarkGfm from 'remark-gfm'
 import remarkParse from 'remark-parse'
@@ -10,6 +10,7 @@ import remarkRehype from 'remark-rehype'
 import { unified } from 'unified'
 
 const postsDirectory = path.join(process.cwd(), 'content/posts')
+const publicDirectory = path.join(process.cwd(), 'public')
 
 export interface Post {
   slug: string // URL 中使用的标识符（不含目录路径）
@@ -84,14 +85,68 @@ async function markdownToHtml(markdown: string): Promise<string> {
     .use(remarkParse)
     .use(remarkGfm)
     .use(remarkRehype, { allowDangerousHtml: true })
-    .use(rehypePrettyCode, {
+    .use(rehypePrettyCodePlugin, {
       theme: 'github-dark-dimmed',
       keepBackground: true,
       defaultLang: 'plaintext'
     })
     .use(rehypeStringify, { allowDangerousHtml: true })
-    .process(markdown)
+    .process(normalizeMarkdownLocalImagePaths(markdown))
   return result.toString()
+}
+
+function resolvePublicAssetPath(assetPath: string): string {
+  if (!assetPath.startsWith('/')) {
+    return assetPath
+  }
+
+  const queryIndex = assetPath.indexOf('?')
+  const hashIndex = assetPath.indexOf('#')
+  const suffixIndexCandidates = [queryIndex, hashIndex].filter((index) => index >= 0)
+  const suffixIndex =
+    suffixIndexCandidates.length > 0
+      ? Math.min(...suffixIndexCandidates)
+      : -1
+  const pathname = suffixIndex >= 0 ? assetPath.slice(0, suffixIndex) : assetPath
+  const suffix = suffixIndex >= 0 ? assetPath.slice(suffixIndex) : ''
+  const segments = pathname.split('/').filter(Boolean)
+
+  if (segments.length === 0) {
+    return assetPath
+  }
+
+  let currentPath = publicDirectory
+  const resolvedSegments: string[] = []
+
+  for (const segment of segments) {
+    if (!fs.existsSync(currentPath) || !fs.statSync(currentPath).isDirectory()) {
+      return assetPath
+    }
+
+    const entries = fs.readdirSync(currentPath)
+    const matchedSegment =
+      entries.find((entry) => entry === segment) ??
+      entries.find((entry) => entry.toLowerCase() === segment.toLowerCase())
+
+    if (!matchedSegment) {
+      return assetPath
+    }
+
+    resolvedSegments.push(matchedSegment)
+    currentPath = path.join(currentPath, matchedSegment)
+  }
+
+  return `/${resolvedSegments.join('/')}${suffix}`
+}
+
+function normalizeMarkdownLocalImagePaths(markdown: string): string {
+  return markdown.replaceAll(/(!\[[^\]]*]\()([^)]+)(\))/g, (match, prefix, url, suffix) => {
+    if (!url.startsWith('/')) {
+      return match
+    }
+
+    return `${prefix}${resolvePublicAssetPath(url)}${suffix}`
+  })
 }
 
 export function getPostBySlug(slug: string): Post | null {
@@ -127,7 +182,7 @@ export function getPostBySlug(slug: string): Post | null {
     series: data.series || series,
     published: data.published !== false,
     listed: data.listed !== false,
-    cover: data.cover,
+    cover: data.cover ? resolvePublicAssetPath(data.cover) : undefined,
     content
   }
 }
