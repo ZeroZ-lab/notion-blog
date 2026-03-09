@@ -2,7 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import type { Post } from '@/lib/posts'
-import { formatPostDateWithRelative } from '@/lib/post-date'
+import { formatPostDate } from '@/lib/post-date'
 
 function encodeImagePath(path: string): string {
   return path
@@ -39,7 +39,7 @@ export function PostCard({ post }: PostCardProps) {
         <div className="flex flex-col flex-1 space-y-2">
           <div className="flex items-center gap-3 text-sm text-muted-foreground">
             <time dateTime={post.date}>
-              {formatPostDateWithRelative(post.date)}
+              {formatPostDate(post.date)}
             </time>
           </div>
           <h2 className="font-serif text-xl font-medium leading-snug">

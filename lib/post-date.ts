@@ -1,5 +1,5 @@
-import { format, formatDistanceToNow } from 'date-fns'
-import { zhCN } from 'date-fns/locale'
+import { format } from 'date-fns'
+import { formatDate } from 'notion-utils'
 
 const DATE_ONLY_PATTERN = /^(\d{4})-(\d{2})-(\d{2})$/
 
@@ -23,25 +23,13 @@ export function parsePostDate(dateString: string): Date {
 }
 
 export function formatPostDate(dateString: string): string {
-  const dateOnlyMatch = DATE_ONLY_PATTERN.exec(dateString)
+  const normalizedDate = DATE_ONLY_PATTERN.test(dateString)
+    ? format(parsePostDate(dateString), 'yyyy-MM-dd')
+    : dateString
 
-  if (dateOnlyMatch) {
-    const [, year, month, day] = dateOnlyMatch
-    return `${year}年${Number(month)}月${Number(day)}日`
-  }
-
-  return format(parsePostDate(dateString), 'yyyy年M月d日')
-}
-
-export function formatRelativePostDate(dateString: string): string {
-  return formatDistanceToNow(parsePostDate(dateString), {
-    addSuffix: true,
-    locale: zhCN
+  return formatDate(normalizedDate, {
+    month: 'long'
   })
-}
-
-export function formatPostDateWithRelative(dateString: string): string {
-  return `${formatPostDate(dateString)} · ${formatRelativePostDate(dateString)}`
 }
 
 export function comparePostDatesDesc(leftDate: string, rightDate: string): number {
