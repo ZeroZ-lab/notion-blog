@@ -9,6 +9,8 @@ import remarkParse from 'remark-parse'
 import remarkRehype from 'remark-rehype'
 import { unified } from 'unified'
 
+import { comparePostDatesDesc } from '@/lib/post-date'
+
 const postsDirectory = path.join(process.cwd(), 'content/posts')
 const publicDirectory = path.join(process.cwd(), 'public')
 
@@ -200,7 +202,7 @@ export function getAllPosts(): Post[] {
   const posts = slugs
     .map((slug) => getPostBySlug(slug))
     .filter((post): post is Post => post !== null && post.published && post.listed)
-    .toSorted((a, b) => (new Date(b.date) > new Date(a.date) ? 1 : -1))
+    .toSorted((a, b) => comparePostDatesDesc(a.date, b.date))
 
   return posts
 }

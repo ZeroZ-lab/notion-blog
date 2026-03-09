@@ -1,4 +1,5 @@
 import { siteConfig } from '@/config/site'
+import { parsePostDate } from '@/lib/post-date'
 import { getAllPosts } from '@/lib/posts'
 
 export async function GET() {
@@ -21,7 +22,7 @@ export async function GET() {
       <link>${siteConfig.url}/posts/${post.slug}</link>
       <guid isPermaLink="true">${siteConfig.url}/posts/${post.slug}</guid>
       <description><![CDATA[${post.description}]]></description>
-      <pubDate>${new Date(post.date).toUTCString()}</pubDate>
+      <pubDate>${parsePostDate(post.date).toUTCString()}</pubDate>
       <category>${post.category}</category>
     </item>`
       )
