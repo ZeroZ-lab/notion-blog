@@ -2,7 +2,7 @@ import Image from 'next/image'
 import { notFound } from 'next/navigation'
 
 import { TableOfContents } from '@/components/table-of-contents'
-import { formatPostDate } from '@/lib/post-date'
+import { formatPostDateWithRelative } from '@/lib/post-date'
 import { getAllPosts, getPostBySlug, getPostBySlugWithHtml } from '@/lib/posts'
 import { addHeadingIds,extractToc } from '@/lib/toc'
 
@@ -74,7 +74,7 @@ export default async function PostPage({ params }: PostPageProps) {
         <div className="space-y-4">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <time dateTime={post.date}>
-              {formatPostDate(post.date)}
+              {formatPostDateWithRelative(post.date)}
             </time>
           </div>
           <h1 className="font-serif text-4xl font-bold tracking-tight">{post.title}</h1>
@@ -93,4 +93,3 @@ export default async function PostPage({ params }: PostPageProps) {
     </>
   )
 }
-

@@ -1,4 +1,5 @@
-import { format } from 'date-fns'
+import { format, formatDistanceToNow } from 'date-fns'
+import { zhCN } from 'date-fns/locale'
 
 const DATE_ONLY_PATTERN = /^(\d{4})-(\d{2})-(\d{2})$/
 
@@ -30,6 +31,17 @@ export function formatPostDate(dateString: string): string {
   }
 
   return format(parsePostDate(dateString), 'yyyy年M月d日')
+}
+
+export function formatRelativePostDate(dateString: string): string {
+  return formatDistanceToNow(parsePostDate(dateString), {
+    addSuffix: true,
+    locale: zhCN
+  })
+}
+
+export function formatPostDateWithRelative(dateString: string): string {
+  return `${formatPostDate(dateString)} · ${formatRelativePostDate(dateString)}`
 }
 
 export function comparePostDatesDesc(leftDate: string, rightDate: string): number {
