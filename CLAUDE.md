@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Next.js blog/website that uses Notion as a CMS. It renders Notion pages as a static website using `react-notion-x` for rendering and `notion-client` for fetching data from Notion's API.
+This is a Chinese-language personal blog ("AI关乎未来") built with Next.js (App Router). Content is authored as local MDX files under `content/posts/` and rendered using `unified` + `rehype-pretty-code` + `shiki`.
 
 ## Commands
 
@@ -19,33 +19,38 @@ pnpm test:prettier # Prettier check only
 
 ## Architecture
 
-### Configuration Flow
-- [site.config.ts](site.config.ts) - Main site configuration (root Notion page ID, site name, domain, social links, feature flags)
-- [lib/config.ts](lib/config.ts) - Parses site.config.ts and environment variables into typed exports
-- [lib/site-config.ts](lib/site-config.ts) - Type definitions for site configuration
+### Content System
+- MDX files live in `content/posts/`, organized by series (e.g. `rag-guide/`, `ai-agent-design-patterns/`, `standalone/`)
+- Each MDX file has frontmatter: `title`, `description`, `date`, `category`, `tags`, `published`, `listed`, `cover`, `series`
+- [lib/posts.ts](lib/posts.ts) reads MDX files via `gray-matter`, converts Markdown to HTML via `unified` pipeline (remark-gfm + rehype-pretty-code with shiki), handles pagination and search
+- [content/about.json](content/about.json) contains author bio/avatar metadata
 
-### Page Resolution Flow
-1. `pages/[pageId].tsx` or `pages/index.tsx` receives request
-2. `lib/resolve-notion-page.ts` resolves URL slug to Notion page ID (uses URI cache in Redis if enabled)
-3. `lib/notion.ts` fetches page data via `notion-client`, with concurrency limits to avoid rate limiting
-4. `lib/notion-api.ts` configures the NotionAPI client (supports `NOTION_TOKEN` for private pages)
-5. `components/NotionPage.tsx` renders the page using `react-notion-x`
+### Configuration
+- [config/site.ts](config/site.ts) - Site metadata (name, URL, author info, social links)
+- [config/tools.ts](config/tools.ts) - Tool directory definitions
+
+### App Router Pages
+- `app/page.tsx` - Homepage with hero section and paginated post cards
+- `app/posts/[slug]/page.tsx` - Blog post detail page with cover image and table of contents
+- `app/page/[page]/page.tsx` - Paginated listing
+- `app/feed.xml/route.ts` - RSS feed
+- `app/api/search/route.ts` - Search API
 
 ### Key Libraries
-- `react-notion-x` - Renders Notion blocks as React components
-- `notion-client` - Unofficial Notion API client for fetching page data
-- `notion-types` / `notion-utils` - Type definitions and utilities for Notion data
+- `unified` + `remark-gfm` + `rehype-pretty-code` + `shiki` - Markdown to HTML conversion with syntax highlighting
+- `gray-matter` - MDX frontmatter parsing
+- `next-themes` - Dark/light mode
+- `tailwindcss` + `@tailwindcss/typography` - Styling with shadcn/ui-style CSS variable theming
 
-### Optional Features (configured in site.config.ts)
-- **Preview Images**: LQIP blur placeholders via `lqip-modern` (`isPreviewImageSupportEnabled`)
-- **Redis Caching**: Cache preview images and URI mappings (`isRedisEnabled`, requires `REDIS_HOST`/`REDIS_PASSWORD`)
-- **Analytics**: Fathom (`NEXT_PUBLIC_FATHOM_ID`) or PostHog (`NEXT_PUBLIC_POSTHOG_ID`)
+### Key Utility Files
+- [lib/posts.ts](lib/posts.ts) - Core content layer (MDX reading, HTML conversion, pagination, search)
+- [lib/toc.ts](lib/toc.ts) - Table of contents extraction from HTML
+- [lib/post-date.ts](lib/post-date.ts) - Date parsing and formatting
+- [lib/utils.ts](lib/utils.ts) - General utilities (`cn()` class merge helper)
 
-### Environment Variables
-- `NOTION_TOKEN` - Optional auth token for private Notion pages
-- `REDIS_HOST`, `REDIS_PASSWORD` - Redis connection for caching
-- `NEXT_PUBLIC_FATHOM_ID` or `NEXT_PUBLIC_POSTHOG_ID` - Analytics
+### Components
+- Active components: `header.tsx`, `new-footer.tsx`, `hero-section.tsx`, `post-card.tsx`, `pagination.tsx`, `search-dialog.tsx`, `table-of-contents.tsx`, `theme-provider.tsx`, `theme-toggle.tsx`, `ui/button.tsx`
 
 ### Styles
-- [styles/notion.css](styles/notion.css) - CSS overrides for Notion blocks (targets react-notion-x classes)
-- Target specific blocks with `.notion-block-{blockId}` selectors
+- [styles/global.css](styles/global.css) - Base resets and scrollbar styling
+- [app/globals.css](app/globals.css) - Tailwind v4 import, CSS custom properties for light/dark themes, code block styling

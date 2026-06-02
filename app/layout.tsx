@@ -40,17 +40,17 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="zh-CN" suppressHydrationWarning>
+    <html lang='zh-CN' suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
+          attribute='class'
+          defaultTheme='system'
           enableSystem
           disableTransitionOnChange
         >
-          <div className="relative min-h-screen flex flex-col">
+          <div className='relative min-h-screen flex flex-col'>
             <Header />
-            <main className="flex-1">{children}</main>
+            <main className='flex-1'>{children}</main>
             <Footer />
           </div>
         </ThemeProvider>

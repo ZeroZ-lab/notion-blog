@@ -20,7 +20,7 @@ export const toolCategories: ToolCategory[] = [
   { slug: 'ai', name: 'AI 工具', icon: 'Sparkles' },
   { slug: 'dev', name: '开发工具', icon: 'Code' },
   { slug: 'converter', name: '转换工具', icon: 'ArrowLeftRight' },
-  { slug: 'generator', name: '生成器', icon: 'Wand2' },
+  { slug: 'generator', name: '生成器', icon: 'Wand2' }
 ]
 
 export const tools: Tool[] = [
@@ -31,7 +31,7 @@ export const tools: Tool[] = [
     icon: 'Braces',
     category: 'dev',
     tags: ['JSON', '格式化', '开发'],
-    featured: true,
+    featured: true
   },
   {
     slug: 'ai-text-generator',
@@ -40,7 +40,7 @@ export const tools: Tool[] = [
     icon: 'Sparkles',
     category: 'ai',
     tags: ['AI', '文本', '生成'],
-    featured: true,
+    featured: true
   },
   {
     slug: 'base64-converter',
@@ -49,7 +49,7 @@ export const tools: Tool[] = [
     icon: 'ArrowLeftRight',
     category: 'converter',
     tags: ['Base64', '编码', '转换'],
-    featured: false,
+    featured: false
   },
   {
     slug: 'qrcode-generator',
@@ -58,6 +58,6 @@ export const tools: Tool[] = [
     icon: 'QrCode',
     category: 'generator',
     tags: ['二维码', '生成', '图片'],
-    featured: false,
-  },
+    featured: false
+  }
 ]

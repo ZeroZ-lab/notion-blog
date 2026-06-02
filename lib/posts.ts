@@ -104,12 +104,13 @@ function resolvePublicAssetPath(assetPath: string): string {
 
   const queryIndex = assetPath.indexOf('?')
   const hashIndex = assetPath.indexOf('#')
-  const suffixIndexCandidates = [queryIndex, hashIndex].filter((index) => index >= 0)
+  const suffixIndexCandidates = [queryIndex, hashIndex].filter(
+    (index) => index >= 0
+  )
   const suffixIndex =
-    suffixIndexCandidates.length > 0
-      ? Math.min(...suffixIndexCandidates)
-      : -1
-  const pathname = suffixIndex >= 0 ? assetPath.slice(0, suffixIndex) : assetPath
+    suffixIndexCandidates.length > 0 ? Math.min(...suffixIndexCandidates) : -1
+  const pathname =
+    suffixIndex >= 0 ? assetPath.slice(0, suffixIndex) : assetPath
   const suffix = suffixIndex >= 0 ? assetPath.slice(suffixIndex) : ''
   const segments = pathname.split('/').filter(Boolean)
 
@@ -121,7 +122,10 @@ function resolvePublicAssetPath(assetPath: string): string {
   const resolvedSegments: string[] = []
 
   for (const segment of segments) {
-    if (!fs.existsSync(currentPath) || !fs.statSync(currentPath).isDirectory()) {
+    if (
+      !fs.existsSync(currentPath) ||
+      !fs.statSync(currentPath).isDirectory()
+    ) {
       return assetPath
     }
 
@@ -142,13 +146,16 @@ function resolvePublicAssetPath(assetPath: string): string {
 }
 
 function normalizeMarkdownLocalImagePaths(markdown: string): string {
-  return markdown.replaceAll(/(!\[[^\]]*]\()([^)]+)(\))/g, (match, prefix, url, suffix) => {
-    if (!url.startsWith('/')) {
-      return match
-    }
+  return markdown.replaceAll(
+    /(!\[[^\]]*]\()([^)]+)(\))/g,
+    (match, prefix, url, suffix) => {
+      if (!url.startsWith('/')) {
+        return match
+      }
 
-    return `${prefix}${resolvePublicAssetPath(url)}${suffix}`
-  })
+      return `${prefix}${resolvePublicAssetPath(url)}${suffix}`
+    }
+  )
 }
 
 export function getPostBySlug(slug: string): Post | null {
@@ -189,7 +196,9 @@ export function getPostBySlug(slug: string): Post | null {
   }
 }
 
-export async function getPostBySlugWithHtml(slug: string): Promise<(Post & { htmlContent: string }) | null> {
+export async function getPostBySlugWithHtml(
+  slug: string
+): Promise<(Post & { htmlContent: string }) | null> {
   const post = getPostBySlug(slug)
   if (!post) return null
 
@@ -201,7 +210,9 @@ export function getAllPosts(): Post[] {
   const slugs = getPostSlugs()
   const posts = slugs
     .map((slug) => getPostBySlug(slug))
-    .filter((post): post is Post => post !== null && post.published && post.listed)
+    .filter(
+      (post): post is Post => post !== null && post.published && post.listed
+    )
     .toSorted((a, b) => comparePostDatesDesc(a.date, b.date))
 
   return posts

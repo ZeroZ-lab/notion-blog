@@ -1,5 +1,4 @@
 import { format } from 'date-fns'
-import { formatDate } from 'notion-utils'
 
 const DATE_ONLY_PATTERN = /^(\d{4})-(\d{2})-(\d{2})$/
 
@@ -23,15 +22,12 @@ export function parsePostDate(dateString: string): Date {
 }
 
 export function formatPostDate(dateString: string): string {
-  const normalizedDate = DATE_ONLY_PATTERN.test(dateString)
-    ? format(parsePostDate(dateString), 'yyyy-MM-dd')
-    : dateString
-
-  return formatDate(normalizedDate, {
-    month: 'long'
-  })
+  return format(parsePostDate(dateString), 'MMMM d, yyyy')
 }
 
-export function comparePostDatesDesc(leftDate: string, rightDate: string): number {
+export function comparePostDatesDesc(
+  leftDate: string,
+  rightDate: string
+): number {
   return parsePostDate(rightDate).getTime() - parsePostDate(leftDate).getTime()
 }

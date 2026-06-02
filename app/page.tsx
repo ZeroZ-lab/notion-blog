@@ -8,16 +8,16 @@ export default function HomePage() {
   const totalPages = getTotalPages()
 
   return (
-    <div className="container py-10 max-w-4xl">
+    <div className='container py-10 max-w-4xl'>
       <HeroSection />
 
-      <div className="mt-12">
-        <h2 className="font-serif text-2xl font-semibold tracking-tight text-foreground mb-6">
+      <div className='mt-12'>
+        <h2 className='font-serif text-2xl font-semibold tracking-tight text-foreground mb-6'>
           最新文章
         </h2>
         {posts.length > 0 ? (
           <>
-            <div className="space-y-8">
+            <div className='space-y-8'>
               {posts.map((post) => (
                 <PostCard key={post.slug} post={post} />
               ))}
@@ -25,10 +25,9 @@ export default function HomePage() {
             <Pagination currentPage={1} totalPages={totalPages} />
           </>
         ) : (
-          <p className="text-muted-foreground text-center">暂无文章</p>
+          <p className='text-muted-foreground text-center'>暂无文章</p>
         )}
       </div>
     </div>
   )
 }
-

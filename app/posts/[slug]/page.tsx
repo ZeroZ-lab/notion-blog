@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import { TableOfContents } from '@/components/table-of-contents'
 import { formatPostDate } from '@/lib/post-date'
 import { getAllPosts, getPostBySlug, getPostBySlugWithHtml } from '@/lib/posts'
-import { addHeadingIds,extractToc } from '@/lib/toc'
+import { addHeadingIds, extractToc } from '@/lib/toc'
 
 function encodeImagePath(path: string): string {
   return path
@@ -55,38 +55,38 @@ export default async function PostPage({ params }: PostPageProps) {
       {/* 右侧固定目录 */}
       {toc.length > 0 && <TableOfContents items={toc} />}
 
-      <article className="container py-10 max-w-3xl">
+      <article className='container py-10 max-w-3xl'>
         {/* Hero Cover Image */}
         {post.cover && (
-          <div className="relative w-full aspect-[2/1] mb-8 overflow-hidden rounded-lg bg-muted">
+          <div className='relative w-full aspect-[2/1] mb-8 overflow-hidden rounded-lg bg-muted'>
             <Image
               src={encodeImagePath(post.cover)}
               alt={post.title}
               fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 768px"
+              className='object-cover'
+              sizes='(max-width: 768px) 100vw, 768px'
               priority
               unoptimized
             />
           </div>
         )}
 
-        <div className="space-y-4">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <time dateTime={post.date}>
-              {formatPostDate(post.date)}
-            </time>
+        <div className='space-y-4'>
+          <div className='flex items-center gap-2 text-sm text-muted-foreground'>
+            <time dateTime={post.date}>{formatPostDate(post.date)}</time>
           </div>
-          <h1 className="font-serif text-4xl font-bold tracking-tight">{post.title}</h1>
+          <h1 className='font-serif text-4xl font-bold tracking-tight'>
+            {post.title}
+          </h1>
           {post.description && (
-            <p className="text-xl text-muted-foreground">{post.description}</p>
+            <p className='text-xl text-muted-foreground'>{post.description}</p>
           )}
         </div>
 
-        <hr className="my-8" />
+        <hr className='my-8' />
 
         {/* 文章内容 */}
-        <div className="prose prose-neutral dark:prose-invert max-w-none">
+        <div className='prose prose-neutral dark:prose-invert max-w-none'>
           <div dangerouslySetInnerHTML={{ __html: htmlWithIds }} />
         </div>
       </article>
