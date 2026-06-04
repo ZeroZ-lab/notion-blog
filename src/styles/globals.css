@@ -1,0 +1,191 @@
+@import "tailwindcss";
+@config "../../tailwind.config.ts";
+
+/* Base resets */
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+body,
+html {
+  padding: 0;
+  margin: 0;
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 99%;
+    --foreground: 0 0% 9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 9%;
+    --primary: 0 0% 15%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 15%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 15%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 0 0% 15%;
+    --radius: 0.625rem;
+  }
+
+  .dark {
+    --background: 0 0% 5%;
+    --foreground: 0 0% 93%;
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 93%;
+    --popover: 0 0% 7%;
+    --popover-foreground: 0 0% 93%;
+    --primary: 0 0% 83%;
+    --primary-foreground: 0 0% 5%;
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 0 0% 85%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 55%;
+    --accent: 0 0% 12%;
+    --accent-foreground: 0 0% 85%;
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14%;
+    --input: 0 0% 14%;
+    --ring: 0 0% 83%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  .container {
+    @apply mx-auto px-5 sm:px-6;
+    max-width: 1200px;
+  }
+}
+
+/* Prose & code block styling */
+.prose a {
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  word-break: break-all !important;
+  max-width: 100%;
+}
+
+.prose {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  max-width: 100%;
+}
+
+.prose > * {
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+.prose pre {
+  margin: 1.75rem 0;
+  padding: 1.125rem 1.25rem;
+  border-radius: 0.75rem;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  background-color: #1a1a2e !important;
+  border: 1px solid hsl(var(--border));
+}
+
+.prose pre code {
+  background: transparent !important;
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+  border: none;
+}
+
+.prose pre [data-language] {
+  display: block;
+}
+
+.prose figure[data-rehype-pretty-code-figure] {
+  margin: 1.75rem 0;
+}
+
+.prose figure[data-rehype-pretty-code-figure] pre {
+  margin: 0;
+}
+
+.prose [data-rehype-pretty-code-title] {
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: hsl(var(--muted-foreground));
+  background-color: #16162a;
+  border: 1px solid hsl(var(--border));
+  border-bottom: none;
+  border-radius: 0.75rem 0.75rem 0 0;
+}
+
+.prose [data-rehype-pretty-code-title] + pre {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.prose pre [data-highlighted-line] {
+  background-color: rgba(99, 110, 123, 0.15);
+  margin: 0 -1.25rem;
+  padding: 0 1.25rem;
+  border-left: 3px solid hsl(var(--primary));
+}
+
+.prose :not(pre) > code {
+  padding: 0.15em 0.4em;
+  border-radius: 0.375rem;
+  background-color: hsl(var(--muted));
+  color: hsl(var(--foreground));
+  font-size: 0.875em;
+  font-weight: 500;
+}
+
+.dark .prose :not(pre) > code {
+  background-color: hsl(var(--muted));
+}
+
+.prose pre::-webkit-scrollbar {
+  height: 6px;
+}
+
+.prose pre::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.prose pre::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+
+.prose pre::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+::selection {
+  background-color: hsl(var(--primary) / 0.15);
+}

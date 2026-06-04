@@ -8,12 +8,9 @@
 # testing
 /coverage
 
-# next.js
-/.next/
-/out/
-
-# production
-/build
+# build output
+/dist/
+/.output/
 
 # misc
 .DS_Store
@@ -35,8 +32,14 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 
-# vercel
-.vercel
+# wrangler
+.wrangler/
 
 # claude
 .claude
+
+# generated search index (regenerated on build)
+/public/search-index.json
+
+# TanStack Start generated route tree (regenerated on dev)
+src/routeTree.gen.ts
