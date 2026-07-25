@@ -236,4 +236,3 @@ export function getTotalPages(): number {
   const allPosts = getAllPosts()
   return Math.ceil(allPosts.length / POSTS_PER_PAGE)
 }
-

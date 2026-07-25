@@ -8,5 +8,5 @@ hydrateRoot(
   document,
   <StrictMode>
     <StartClient router={getRouter()} />
-  </StrictMode>,
+  </StrictMode>
 )

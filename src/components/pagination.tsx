@@ -8,7 +8,7 @@ interface PaginationProps {
 }
 
 const buttonClass =
-  'border-2 border-border bg-card px-3 py-1.5 text-sm font-bold shadow-brutal-sm transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none'
+  'group border-2 border-border bg-card px-3 py-1.5 text-sm font-bold shadow-brutal-sm transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none'
 const disabledClass =
   'cursor-not-allowed border-2 border-border/30 px-3 py-1.5 text-sm font-bold text-muted-foreground/50'
 
@@ -59,7 +59,10 @@ export function Pagination({ currentPage, totalPages }: PaginationProps) {
       {currentPage > 1 ? (
         currentPage - 1 === 1 ? (
           <Link to='/' className={buttonClass} aria-label='上一页'>
-            ← 上一页
+            <span className='mr-1 inline-block group-hover:animate-brutal-bounce-x'>
+              ←
+            </span>
+            上一页
           </Link>
         ) : (
           <Link
@@ -68,7 +71,10 @@ export function Pagination({ currentPage, totalPages }: PaginationProps) {
             className={buttonClass}
             aria-label='上一页'
           >
-            ← 上一页
+            <span className='mr-1 inline-block group-hover:animate-brutal-bounce-x'>
+              ←
+            </span>
+            上一页
           </Link>
         )
       ) : (
@@ -133,7 +139,10 @@ export function Pagination({ currentPage, totalPages }: PaginationProps) {
           className={buttonClass}
           aria-label='下一页'
         >
-          下一页 →
+          下一页
+          <span className='ml-1 inline-block group-hover:animate-brutal-bounce-x'>
+            →
+          </span>
         </Link>
       ) : (
         <span className={disabledClass}>下一页 →</span>

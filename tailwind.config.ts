@@ -3,10 +3,7 @@ import typography from '@tailwindcss/typography'
 
 const config: Config = {
   darkMode: 'class',
-  content: [
-    './src/**/*.{js,ts,jsx,tsx,mdx}',
-    './content/**/*.{md,mdx}'
-  ],
+  content: ['./src/**/*.{js,ts,jsx,tsx,mdx}', './content/**/*.{md,mdx}'],
   theme: {
     extend: {
       fontFamily: {
@@ -18,8 +15,8 @@ const config: Config = {
           'Apple Color Emoji',
           'Segoe UI Emoji',
           'Segoe UI Symbol',
-          'Noto Color Emoji',
-        ],
+          'Noto Color Emoji'
+        ]
       },
       colors: {
         border: 'hsl(var(--border))',

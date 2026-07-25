@@ -25,7 +25,7 @@ export function PostCard({ post, index = 0 }: PostCardProps) {
         >
           {/* Cover Image */}
           {post.cover && (
-            <div className='relative aspect-[2/1] w-full flex-shrink-0 overflow-hidden border-b-4 border-border'>
+            <div className='relative aspect-[5/2] w-full flex-shrink-0 overflow-hidden border-b-4 border-border'>
               <img
                 src={encodeImagePath(post.cover)}
                 alt={post.title}
@@ -66,6 +66,14 @@ export function PostCard({ post, index = 0 }: PostCardProps) {
                 {post.description}
               </p>
             )}
+
+            {/* 阅读全文 */}
+            <span className='mt-auto inline-flex items-center gap-1.5 pt-1 text-sm font-black text-accent'>
+              阅读全文
+              <span className='inline-block group-hover:animate-brutal-bounce-x'>
+                →
+              </span>
+            </span>
           </div>
         </div>
       </Link>

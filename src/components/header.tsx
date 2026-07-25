@@ -27,8 +27,8 @@ export function Header() {
       <header className='sticky top-0 z-50 w-full border-b-4 border-border bg-background'>
         <div className='container flex h-16 items-center max-w-4xl'>
           <div className='mr-4 flex'>
-            <Link to='/' className='mr-8 flex items-center space-x-2.5'>
-              <div className='flex h-8 w-8 items-center justify-center border-2 border-border bg-accent shadow-brutal-sm'>
+            <Link to='/' className='group mr-8 flex items-center space-x-2.5'>
+              <div className='flex h-8 w-8 items-center justify-center border-2 border-border bg-accent shadow-brutal-sm group-hover:animate-brutal-tada'>
                 <span className='text-sm font-black text-white'>AI</span>
               </div>
               <span className='text-lg font-black tracking-tight text-foreground'>

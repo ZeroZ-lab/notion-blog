@@ -1,6 +1,6 @@
 import {
   ThemeProvider as NextThemesProvider,
-  type ThemeProviderProps,
+  type ThemeProviderProps
 } from 'next-themes'
 import * as React from 'react'
 

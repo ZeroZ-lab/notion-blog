@@ -1,3 +1,4 @@
+import { DinoGame } from '@/components/dino-game'
 import { siteConfig } from '@/config/site'
 import { brutalAccent } from '@/lib/utils'
 
@@ -6,13 +7,20 @@ export function HeroSection() {
 
   return (
     <section className='animate-brutal-pop relative border-4 border-border bg-accent p-7 shadow-brutal-lg sm:p-12'>
+      {/* 旋转星形徽章 */}
+      <div className='animate-brutal-float absolute -top-5 right-8 hidden sm:block'>
+        <span className='animate-brutal-spin-slow flex h-12 w-12 items-center justify-center border-2 border-border bg-[#facc15] text-xl font-black text-black shadow-brutal-sm'>
+          ✦
+        </span>
+      </div>
+
       <div className='flex flex-col items-center gap-6 text-center sm:flex-row sm:items-start sm:gap-8 sm:text-left'>
         {/* Avatar */}
         {hasAvatar ? (
           <img
             src={siteConfig.author.avatar}
             alt={siteConfig.author.name}
-            className='h-24 w-24 flex-shrink-0 border-4 border-border bg-muted object-cover shadow-brutal sm:h-28 sm:w-28'
+            className='h-24 w-24 flex-shrink-0 border-4 border-border bg-muted object-cover shadow-brutal hover:animate-brutal-wiggle sm:h-28 sm:w-28'
             loading='eager'
           />
         ) : (
@@ -82,6 +90,9 @@ export function HeroSection() {
           </div>
         </div>
       </div>
+
+      {/* 离线小恐龙跑酷 */}
+      <DinoGame />
     </section>
   )
 }

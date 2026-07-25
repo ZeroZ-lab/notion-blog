@@ -16,7 +16,7 @@ export function Footer() {
             href={siteConfig.links.github}
             target='_blank'
             rel='noreferrer'
-            className='border-2 border-border bg-card p-1.5 text-card-foreground shadow-brutal-sm transition-all duration-150 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none'
+            className='border-2 border-border bg-card p-1.5 text-card-foreground shadow-brutal-sm transition-all duration-150 hover:translate-x-[2px] hover:translate-y-[2px] hover:animate-brutal-wiggle hover:shadow-none'
           >
             <Github className='h-4 w-4' />
             <span className='sr-only'>GitHub</span>
@@ -25,7 +25,7 @@ export function Footer() {
             href={siteConfig.links.twitter}
             target='_blank'
             rel='noreferrer'
-            className='border-2 border-border bg-card p-1.5 text-card-foreground shadow-brutal-sm transition-all duration-150 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none'
+            className='border-2 border-border bg-card p-1.5 text-card-foreground shadow-brutal-sm transition-all duration-150 hover:translate-x-[2px] hover:translate-y-[2px] hover:animate-brutal-wiggle hover:shadow-none'
           >
             <Twitter className='h-4 w-4' />
             <span className='sr-only'>Twitter</span>

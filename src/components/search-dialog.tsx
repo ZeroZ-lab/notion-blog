@@ -49,7 +49,7 @@ function clientSearch(query: string, index: SearchResult[]): SearchResult[] {
       return { post, score }
     })
     .filter((r) => r.score > 0)
-    .sort((a, b) => b.score - a.score)
+    .toSorted((a, b) => b.score - a.score)
     .map((r) => r.post)
     .slice(0, 10)
 }
@@ -68,15 +68,17 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
 
   // 搜索逻辑（带防抖，纯客户端）
   useEffect(() => {
-    const timer = setTimeout(async () => {
-      if (query.trim()) {
-        const index = await getSearchIndex()
-        const filtered = clientSearch(query, index)
-        setResults(filtered)
-        setSelectedIndex(0)
-      } else {
-        setResults([])
-      }
+    const timer = setTimeout(() => {
+      void (async () => {
+        if (query.trim()) {
+          const index = await getSearchIndex()
+          const filtered = clientSearch(query, index)
+          setResults(filtered)
+          setSelectedIndex(0)
+        } else {
+          setResults([])
+        }
+      })()
     }, 200)
 
     return () => clearTimeout(timer)
@@ -85,7 +87,7 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
   // 选择文章
   const handleSelectPost = useCallback(
     (post: SearchResult) => {
-      navigate({ to: '/posts/$slug', params: { slug: post.slug } })
+      void navigate({ to: '/posts/$slug', params: { slug: post.slug } })
       onOpenChange(false)
       setQuery('')
     },
@@ -141,7 +143,7 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
 
       {/* 对话框 */}
       <div className='fixed left-1/2 top-[20vh] z-50 w-full max-w-2xl -translate-x-1/2 px-4'>
-        <div className='border-4 border-border bg-background shadow-brutal-lg'>
+        <div className='animate-brutal-pop border-4 border-border bg-background shadow-brutal-lg'>
           {/* 搜索输入框 */}
           <div className='flex items-center border-b-2 border-border px-4'>
             <Search className='mr-2 h-5 w-5 text-muted-foreground' />
