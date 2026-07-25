@@ -3,6 +3,10 @@ import { config } from '@fisch0920/config/eslint'
 export default [
   ...config,
   {
+    // TanStack Router generated file (gitignored, regenerated on dev/build)
+    ignores: ['src/routeTree.gen.ts']
+  },
+  {
     files: ['**/*.ts', '**/*.tsx'],
     rules: {
       'react/prop-types': 'off',

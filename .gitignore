@@ -35,6 +35,9 @@ yarn-error.log*
 # wrangler
 .wrangler/
 
+# playwright-mcp session output
+.playwright-mcp/
+
 # claude
 .claude
 
