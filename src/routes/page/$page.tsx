@@ -2,6 +2,7 @@ import { createFileRoute, notFound } from '@tanstack/react-router'
 
 import { Pagination } from '@/components/pagination'
 import { PostCard } from '@/components/post-card'
+import { Reveal } from '@/components/reveal'
 import { getPageData } from '@/lib/server-posts'
 
 export const Route = createFileRoute('/page/$page')({
@@ -29,7 +30,13 @@ function PaginatedPage() {
       </h2>
       <div className='grid gap-7 sm:grid-cols-2'>
         {posts.map((post, i) => (
-          <PostCard key={post.slug} post={post} index={i} />
+          <Reveal
+            key={post.slug}
+            className='h-full'
+            delay={Math.min(i, 9) * 0.06}
+          >
+            <PostCard post={post} />
+          </Reveal>
         ))}
       </div>
       <Pagination currentPage={currentPage} totalPages={totalPages} />

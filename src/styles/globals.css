@@ -231,6 +231,17 @@ html {
   .animate-brutal-tada {
     animation: none;
   }
+  /* reveal 降级为直接可见，禁止动画 */
+  [data-reveal] {
+    opacity: 1;
+  }
+  [data-reveal].is-revealed {
+    animation: none;
+  }
+  ::view-transition-new(root) {
+    animation: none;
+    clip-path: none;
+  }
 }
 
 @layer base {
@@ -254,16 +265,105 @@ html {
   }
 }
 
+/* 滚动入场 reveal：JS 观察进入视口后加 is-revealed */
+[data-reveal] {
+  opacity: 0;
+}
+[data-reveal].is-revealed {
+  animation: brutal-pop 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* 代码块复制按钮 */
+.prose figure[data-rehype-pretty-code-figure] {
+  position: relative;
+}
+.prose pre.code-pre-anchored {
+  position: relative;
+}
+.code-copy-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 10;
+  border: 2px solid hsl(var(--border));
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+  padding: 0.15rem 0.55rem;
+  font-size: 0.75rem;
+  font-weight: 900;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 0 hsl(var(--border));
+  opacity: 0;
+  transition:
+    opacity 0.15s,
+    translate 0.15s,
+    box-shadow 0.15s;
+}
+.code-copy-btn:hover {
+  translate: 2px 2px;
+  box-shadow: 1px 1px 0 0 hsl(var(--border));
+}
+.prose figure[data-rehype-pretty-code-figure]:hover .code-copy-btn,
+.prose pre.code-pre-anchored:hover .code-copy-btn,
+.code-copy-btn.copied {
+  opacity: 1;
+}
+.code-copy-btn.copied {
+  animation: brutal-pop 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@media (hover: none) {
+  .code-copy-btn {
+    opacity: 1;
+  }
+}
+
+/* 主题切换圆形扩散（view-transition） */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  z-index: 1;
+}
+::view-transition-new(root) {
+  z-index: 2147483646;
+  clip-path: circle(0px at var(--vt-x, 50vw) var(--vt-y, 50vh));
+  animation: brutal-vt-circle 0.45s ease-out forwards;
+}
+@keyframes brutal-vt-circle {
+  to {
+    clip-path: circle(150vmax at var(--vt-x, 50vw) var(--vt-y, 50vh));
+  }
+}
+
 /* Prose & code block styling */
 .prose a {
   word-wrap: break-word !important;
   overflow-wrap: break-word !important;
   word-break: break-all !important;
   max-width: 100%;
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 3px;
   font-weight: 600;
+  text-decoration: none;
+  /* 静态 2px 基线 + hover 时 accent 粗下划线从左滑入 */
+  background-image:
+    linear-gradient(hsl(var(--accent)), hsl(var(--accent))),
+    linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-size:
+    0% 3px,
+    100% 2px;
+  background-position:
+    0 100%,
+    0 100%;
+  transition: background-size 0.22s ease-out;
+}
+
+.prose a:hover {
+  background-size:
+    100% 3px,
+    100% 2px;
 }
 
 .prose {

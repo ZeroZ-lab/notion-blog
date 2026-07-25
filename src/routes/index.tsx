@@ -3,6 +3,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { HeroSection } from '@/components/hero-section'
 import { Pagination } from '@/components/pagination'
 import { PostCard } from '@/components/post-card'
+import { Reveal } from '@/components/reveal'
 import { siteConfig } from '@/config/site'
 import { getHomeData } from '@/lib/server-posts'
 
@@ -44,7 +45,13 @@ function HomePage() {
           <>
             <div className='grid gap-7 sm:grid-cols-2'>
               {data.posts.map((post, i) => (
-                <PostCard key={post.slug} post={post} index={i} />
+                <Reveal
+                  key={post.slug}
+                  className='h-full'
+                  delay={Math.min(i, 9) * 0.06}
+                >
+                  <PostCard post={post} />
+                </Reveal>
               ))}
             </div>
             <Pagination currentPage={1} totalPages={data.totalPages} />

@@ -6,10 +6,9 @@ import { brutalAccent, encodeImagePath } from '@/lib/utils'
 
 interface PostCardProps {
   post: Post
-  index?: number
 }
 
-export function PostCard({ post, index = 0 }: PostCardProps) {
+export function PostCard({ post }: PostCardProps) {
   const accent = post.category ? brutalAccent(post.category) : null
 
   return (
@@ -19,10 +18,7 @@ export function PostCard({ post, index = 0 }: PostCardProps) {
         params={{ slug: post.slug }}
         className='block h-full'
       >
-        <div
-          className='animate-brutal-pop flex h-full flex-col border-4 border-border bg-card shadow-brutal transition-all duration-150 hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-brutal-sm'
-          style={{ animationDelay: `${0.1 + Math.min(index, 9) * 0.06}s` }}
-        >
+        <div className='flex h-full flex-col border-4 border-border bg-card shadow-brutal transition-all duration-150 hover:-rotate-1 hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-brutal-sm'>
           {/* Cover Image */}
           {post.cover && (
             <div className='relative aspect-[5/2] w-full flex-shrink-0 overflow-hidden border-b-4 border-border'>
