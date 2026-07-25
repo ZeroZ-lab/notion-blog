@@ -28,8 +28,8 @@ function PaginatedPage() {
         第 {currentPage} 页
       </h2>
       <div className='grid gap-7 sm:grid-cols-2'>
-        {posts.map((post) => (
-          <PostCard key={post.slug} post={post} />
+        {posts.map((post, i) => (
+          <PostCard key={post.slug} post={post} index={i} />
         ))}
       </div>
       <Pagination currentPage={currentPage} totalPages={totalPages} />

@@ -5,7 +5,7 @@ export function HeroSection() {
   const hasAvatar = siteConfig.author.avatar
 
   return (
-    <section className='relative border-4 border-border bg-accent p-7 shadow-brutal-lg sm:p-12'>
+    <section className='animate-brutal-pop relative border-4 border-border bg-accent p-7 shadow-brutal-lg sm:p-12'>
       <div className='flex flex-col items-center gap-6 text-center sm:flex-row sm:items-start sm:gap-8 sm:text-left'>
         {/* Avatar */}
         {hasAvatar ? (
@@ -30,6 +30,7 @@ export function HeroSection() {
           </h1>
           <p className='mt-2 inline-block border-2 border-border bg-card px-2.5 py-0.5 font-mono text-xs font-bold text-card-foreground shadow-brutal-sm'>
             by {siteConfig.author.name}
+            <span className='animate-brutal-blink ml-1'>▌</span>
           </p>
 
           {/* Bio 贴纸 */}
@@ -39,10 +40,14 @@ export function HeroSection() {
               return (
                 <li
                   key={index}
-                  className={`border-2 border-border px-2.5 py-1 text-xs font-bold shadow-brutal-sm ${
+                  className={`animate-brutal-pop border-2 border-border px-2.5 py-1 text-xs font-bold shadow-brutal-sm hover:animate-brutal-wiggle ${
                     index % 2 === 0 ? '-rotate-1' : 'rotate-1'
                   }`}
-                  style={{ backgroundColor: accent.bg, color: accent.fg }}
+                  style={{
+                    backgroundColor: accent.bg,
+                    color: accent.fg,
+                    animationDelay: `${0.2 + index * 0.07}s`
+                  }}
                 >
                   {item}
                 </li>

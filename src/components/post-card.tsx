@@ -6,9 +6,10 @@ import { brutalAccent, encodeImagePath } from '@/lib/utils'
 
 interface PostCardProps {
   post: Post
+  index?: number
 }
 
-export function PostCard({ post }: PostCardProps) {
+export function PostCard({ post, index = 0 }: PostCardProps) {
   const accent = post.category ? brutalAccent(post.category) : null
 
   return (
@@ -18,7 +19,10 @@ export function PostCard({ post }: PostCardProps) {
         params={{ slug: post.slug }}
         className='block h-full'
       >
-        <div className='flex h-full flex-col border-4 border-border bg-card shadow-brutal transition-all duration-150 hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-brutal-sm'>
+        <div
+          className='animate-brutal-pop flex h-full flex-col border-4 border-border bg-card shadow-brutal transition-all duration-150 hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-brutal-sm'
+          style={{ animationDelay: `${0.1 + Math.min(index, 9) * 0.06}s` }}
+        >
           {/* Cover Image */}
           {post.cover && (
             <div className='relative aspect-[2/1] w-full flex-shrink-0 overflow-hidden border-b-4 border-border'>
@@ -37,7 +41,7 @@ export function PostCard({ post }: PostCardProps) {
             <div className='flex items-center gap-2.5'>
               {accent && post.category && (
                 <span
-                  className='inline-block rotate-1 border-2 border-border px-2 py-0.5 text-xs font-black'
+                  className='inline-block rotate-1 border-2 border-border px-2 py-0.5 text-xs font-black group-hover:animate-brutal-wiggle'
                   style={{ backgroundColor: accent.bg, color: accent.fg }}
                 >
                   {post.category}
