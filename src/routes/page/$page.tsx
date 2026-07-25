@@ -10,11 +10,9 @@ export const Route = createFileRoute('/page/$page')({
     return getPageData({ data: page })
   },
   head: ({ loaderData }) => ({
-    meta: [
-      { title: `第 ${loaderData.currentPage} 页 | AI关乎未来` },
-    ],
+    meta: [{ title: `第 ${loaderData.currentPage} 页 | AI关乎未来` }]
   }),
-  component: PaginatedPage,
+  component: PaginatedPage
 })
 
 function PaginatedPage() {
@@ -26,10 +24,10 @@ function PaginatedPage() {
 
   return (
     <div className='container py-8 max-w-4xl'>
-      <h2 className='font-serif text-xl font-semibold tracking-tight text-foreground/80 mb-8'>
+      <h2 className='mb-8 inline-block -rotate-1 border-4 border-border bg-primary px-4 py-2 text-xl font-black text-primary-foreground shadow-brutal'>
         第 {currentPage} 页
       </h2>
-      <div className='grid gap-6 sm:grid-cols-2'>
+      <div className='grid gap-7 sm:grid-cols-2'>
         {posts.map((post) => (
           <PostCard key={post.slug} post={post} />
         ))}

@@ -2,55 +2,63 @@ import { Link } from '@tanstack/react-router'
 
 import type { Post } from '@/lib/posts'
 import { formatPostDate } from '@/lib/post-date'
-import { encodeImagePath } from '@/lib/utils'
+import { brutalAccent, encodeImagePath } from '@/lib/utils'
 
 interface PostCardProps {
   post: Post
 }
 
 export function PostCard({ post }: PostCardProps) {
+  const accent = post.category ? brutalAccent(post.category) : null
+
   return (
-    <article className='group'>
-      <Link to='/posts/$slug' params={{ slug: post.slug }} className='block'>
-        <div className='relative overflow-hidden rounded-xl bg-card border border-border/50 shadow-sm transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:border-border hover:-translate-y-0.5'>
+    <article className='group h-full'>
+      <Link
+        to='/posts/$slug'
+        params={{ slug: post.slug }}
+        className='block h-full'
+      >
+        <div className='flex h-full flex-col border-4 border-border bg-card shadow-brutal transition-all duration-150 hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-brutal-sm'>
           {/* Cover Image */}
           {post.cover && (
-            <div className='relative w-full aspect-[2/1] overflow-hidden'>
+            <div className='relative aspect-[2/1] w-full flex-shrink-0 overflow-hidden border-b-4 border-border'>
               <img
                 src={encodeImagePath(post.cover)}
                 alt={post.title}
-                className='object-cover transition-transform duration-500 group-hover:scale-105 w-full h-full'
+                className='h-full w-full object-cover transition-transform duration-300 group-hover:scale-105'
                 loading='lazy'
               />
-              <div className='absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
             </div>
           )}
 
           {/* Content */}
-          <div className='p-5 sm:p-6 space-y-3'>
+          <div className='flex flex-1 flex-col gap-3 p-5'>
             {/* Meta */}
-            <div className='flex items-center gap-2 text-sm text-muted-foreground'>
-              <time dateTime={post.date} className='font-medium tabular-nums'>
+            <div className='flex items-center gap-2.5'>
+              {accent && post.category && (
+                <span
+                  className='inline-block rotate-1 border-2 border-border px-2 py-0.5 text-xs font-black'
+                  style={{ backgroundColor: accent.bg, color: accent.fg }}
+                >
+                  {post.category}
+                </span>
+              )}
+              <time
+                dateTime={post.date}
+                className='font-mono text-xs font-bold text-muted-foreground tabular-nums'
+              >
                 {formatPostDate(post.date)}
               </time>
-              {post.category && (
-                <>
-                  <span className='text-border'>·</span>
-                  <span className='text-xs px-2 py-0.5 rounded-full bg-secondary/80 text-secondary-foreground font-medium'>
-                    {post.category}
-                  </span>
-                </>
-              )}
             </div>
 
             {/* Title */}
-            <h2 className='font-serif text-xl sm:text-2xl font-semibold leading-snug tracking-tight group-hover:text-primary transition-colors duration-200'>
+            <h2 className='text-xl font-black leading-snug tracking-tight underline-offset-4 decoration-accent decoration-4 group-hover:underline'>
               {post.title}
             </h2>
 
             {/* Description */}
             {post.description && (
-              <p className='text-muted-foreground leading-relaxed line-clamp-2 text-[0.94rem]'>
+              <p className='line-clamp-2 text-sm font-medium leading-relaxed text-muted-foreground'>
                 {post.description}
               </p>
             )}

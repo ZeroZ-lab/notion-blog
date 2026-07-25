@@ -7,6 +7,11 @@ interface PaginationProps {
   totalPages: number
 }
 
+const buttonClass =
+  'border-2 border-border bg-card px-3 py-1.5 text-sm font-bold shadow-brutal-sm transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none'
+const disabledClass =
+  'cursor-not-allowed border-2 border-border/30 px-3 py-1.5 text-sm font-bold text-muted-foreground/50'
+
 export function Pagination({ currentPage, totalPages }: PaginationProps) {
   if (totalPages <= 1) return null
 
@@ -47,68 +52,56 @@ export function Pagination({ currentPage, totalPages }: PaginationProps) {
 
   return (
     <nav
-      className='flex items-center justify-center gap-1 mt-16'
+      className='mt-16 flex items-center justify-center gap-2'
       aria-label='分页导航'
     >
       {/* 上一页 */}
       {currentPage > 1 ? (
         currentPage - 1 === 1 ? (
-          <Link
-            to='/'
-            className={cn(
-              'px-3 py-2 text-sm rounded-md transition-colors',
-              'text-muted-foreground hover:text-foreground hover:bg-muted'
-            )}
-            aria-label='上一页'
-          >
+          <Link to='/' className={buttonClass} aria-label='上一页'>
             ← 上一页
           </Link>
         ) : (
           <Link
             to='/page/$page'
             params={{ page: String(currentPage - 1) }}
-            className={cn(
-              'px-3 py-2 text-sm rounded-md transition-colors',
-              'text-muted-foreground hover:text-foreground hover:bg-muted'
-            )}
+            className={buttonClass}
             aria-label='上一页'
           >
             ← 上一页
           </Link>
         )
       ) : (
-        <span className='px-3 py-2 text-sm text-muted-foreground/50 cursor-not-allowed'>
-          ← 上一页
-        </span>
+        <span className={disabledClass}>← 上一页</span>
       )}
 
       {/* 页码 */}
-      <div className='flex items-center gap-1 mx-2'>
+      <div className='mx-2 flex items-center gap-2'>
         {pageNumbers.map((page, index) => {
           if (page === 'ellipsis') {
             return (
               <span
                 key={`ellipsis-${index}`}
-                className='px-2 py-2 text-sm text-muted-foreground'
+                className='px-1 py-1.5 text-sm font-bold text-muted-foreground'
               >
-                ...
+                …
               </span>
             )
           }
 
           const isCurrentPage = page === currentPage
+          const pageClass = cn(
+            buttonClass,
+            'min-w-10 text-center tabular-nums',
+            isCurrentPage && 'bg-primary text-primary-foreground'
+          )
 
           if (page === 1) {
             return (
               <Link
                 key={page}
                 to='/'
-                className={cn(
-                  'min-w-[2.5rem] px-3 py-2 text-sm rounded-md text-center transition-colors',
-                  isCurrentPage
-                    ? 'bg-primary text-primary-foreground font-medium'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-                )}
+                className={pageClass}
                 aria-current={isCurrentPage ? 'page' : undefined}
                 aria-label='第 1 页'
               >
@@ -122,12 +115,7 @@ export function Pagination({ currentPage, totalPages }: PaginationProps) {
               key={page}
               to='/page/$page'
               params={{ page: String(page) }}
-              className={cn(
-                'min-w-[2.5rem] px-3 py-2 text-sm rounded-md text-center transition-colors',
-                isCurrentPage
-                  ? 'bg-primary text-primary-foreground font-medium'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-              )}
+              className={pageClass}
               aria-current={isCurrentPage ? 'page' : undefined}
               aria-label={`第 ${page} 页`}
             >
@@ -142,18 +130,13 @@ export function Pagination({ currentPage, totalPages }: PaginationProps) {
         <Link
           to='/page/$page'
           params={{ page: String(currentPage + 1) }}
-          className={cn(
-            'px-3 py-2 text-sm rounded-md transition-colors',
-            'text-muted-foreground hover:text-foreground hover:bg-muted'
-          )}
+          className={buttonClass}
           aria-label='下一页'
         >
           下一页 →
         </Link>
       ) : (
-        <span className='px-3 py-2 text-sm text-muted-foreground/50 cursor-not-allowed'>
-          下一页 →
-        </span>
+        <span className={disabledClass}>下一页 →</span>
       )}
     </nav>
   )

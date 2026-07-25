@@ -66,7 +66,7 @@ export function TableOfContents({ items }: TableOfContentsProps) {
       className='toc hidden 2xl:sticky 2xl:top-24 2xl:block 2xl:self-start'
       aria-label='目录导航'
     >
-      <div className='max-h-[calc(100vh-8rem)] overflow-y-auto rounded-xl border border-border/40 bg-card/75 p-4 shadow-sm shadow-primary/5 backdrop-blur-lg'>
+      <div className='max-h-[calc(100vh-8rem)] overflow-y-auto border-2 border-border bg-card p-4 shadow-brutal'>
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
           className='w-full text-xs font-semibold text-foreground/70 mb-3 flex items-center justify-between hover:text-foreground transition-colors uppercase tracking-wider'
@@ -127,9 +127,9 @@ export function TableOfContents({ items }: TableOfContentsProps) {
                   href={`#${item.id}`}
                   onClick={(e) => handleClick(e, item.id)}
                   className={cn(
-                    'block py-1 transition-colors duration-200 hover:text-foreground line-clamp-2',
+                    'block px-1.5 py-1 font-medium line-clamp-2 transition-colors duration-200 hover:bg-secondary hover:text-foreground',
                     activeId === item.id
-                      ? 'text-foreground font-medium'
+                      ? 'bg-primary font-bold text-primary-foreground'
                       : 'text-muted-foreground'
                   )}
                 >

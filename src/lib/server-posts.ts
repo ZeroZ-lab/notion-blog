@@ -1,12 +1,17 @@
 import { createServerFn } from '@tanstack/react-start'
-import { getPaginatedPosts, getTotalPages, getPostBySlugWithHtml } from '@/lib/posts'
+
+import {
+  getPaginatedPosts,
+  getPostBySlugWithHtml,
+  getTotalPages
+} from '@/lib/posts'
 import { addHeadingIds, extractToc } from '@/lib/toc'
 
 // 获取首页文章数据
 export const getHomeData = createServerFn().handler(async () => {
   return {
     posts: getPaginatedPosts(1),
-    totalPages: getTotalPages(),
+    totalPages: getTotalPages()
   }
 })
 
@@ -18,7 +23,7 @@ export const getPageData = createServerFn()
     return {
       posts: getPaginatedPosts(data),
       totalPages,
-      currentPage: data,
+      currentPage: data
     }
   })
 

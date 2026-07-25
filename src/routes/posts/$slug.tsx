@@ -3,7 +3,7 @@ import { createFileRoute, notFound } from '@tanstack/react-router'
 import { TableOfContents } from '@/components/table-of-contents'
 import { formatPostDate } from '@/lib/post-date'
 import { getPostData } from '@/lib/server-posts'
-import { encodeImagePath } from '@/lib/utils'
+import { brutalAccent, encodeImagePath } from '@/lib/utils'
 
 export const Route = createFileRoute('/posts/$slug')({
   loader: ({ params }) => getPostData({ data: params.slug }),
@@ -16,11 +16,11 @@ export const Route = createFileRoute('/posts/$slug')({
         { title: loaderData.post.title },
         { name: 'description', content: loaderData.post.description },
         { property: 'og:title', content: loaderData.post.title },
-        { property: 'og:description', content: loaderData.post.description },
-      ],
+        { property: 'og:description', content: loaderData.post.description }
+      ]
     }
   },
-  component: PostPage,
+  component: PostPage
 })
 
 function PostPage() {
@@ -37,24 +37,30 @@ function PostPage() {
       <article className='mx-auto w-full max-w-3xl 2xl:mx-0 2xl:max-w-none'>
         {/* Header */}
         <header className='mb-10 space-y-5'>
-          <div className='flex items-center gap-2 text-sm text-muted-foreground'>
-            <time dateTime={post.date} className='font-medium tabular-nums'>
+          <div className='flex items-center gap-3 text-sm'>
+            {post.category && (
+              <span
+                className='inline-block -rotate-1 border-2 border-border px-2 py-0.5 text-xs font-black'
+                style={{
+                  backgroundColor: brutalAccent(post.category).bg,
+                  color: brutalAccent(post.category).fg
+                }}
+              >
+                {post.category}
+              </span>
+            )}
+            <time
+              dateTime={post.date}
+              className='font-mono text-xs font-bold text-muted-foreground tabular-nums'
+            >
               {formatPostDate(post.date)}
             </time>
-            {post.category && (
-              <>
-                <span className='text-border'>·</span>
-                <span className='rounded-full bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground'>
-                  {post.category}
-                </span>
-              </>
-            )}
           </div>
-          <h1 className='font-serif text-3xl font-bold leading-tight tracking-tight sm:text-4xl'>
+          <h1 className='text-3xl font-black leading-tight tracking-tight sm:text-4xl'>
             {post.title}
           </h1>
           {post.description && (
-            <p className='text-lg leading-relaxed text-muted-foreground'>
+            <p className='border-l-4 border-border bg-secondary p-4 text-base font-medium leading-relaxed text-secondary-foreground'>
               {post.description}
             </p>
           )}
@@ -62,7 +68,7 @@ function PostPage() {
 
         {/* Cover Image */}
         {post.cover && (
-          <div className='relative mb-10 aspect-[2/1] w-full overflow-hidden rounded-xl bg-muted shadow-sm'>
+          <div className='relative mb-10 aspect-[2/1] w-full overflow-hidden border-4 border-border bg-muted shadow-brutal-lg'>
             <img
               src={encodeImagePath(post.cover)}
               alt={post.title}

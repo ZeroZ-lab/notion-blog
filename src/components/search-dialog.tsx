@@ -1,5 +1,5 @@
-import { Search, X } from 'lucide-react'
 import { useNavigate } from '@tanstack/react-router'
+import { Search, X } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 interface SearchResult {
@@ -135,15 +135,15 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
     <>
       {/* 背景遮罩 */}
       <div
-        className='fixed inset-0 z-50 bg-black/50 backdrop-blur-sm'
+        className='fixed inset-0 z-50 bg-black/60'
         onClick={() => onOpenChange(false)}
       />
 
       {/* 对话框 */}
       <div className='fixed left-1/2 top-[20vh] z-50 w-full max-w-2xl -translate-x-1/2 px-4'>
-        <div className='rounded-lg border border-border bg-background shadow-2xl'>
+        <div className='border-4 border-border bg-background shadow-brutal-lg'>
           {/* 搜索输入框 */}
-          <div className='flex items-center border-b border-border px-4'>
+          <div className='flex items-center border-b-2 border-border px-4'>
             <Search className='mr-2 h-5 w-5 text-muted-foreground' />
             <input
               ref={inputRef}
@@ -177,10 +177,10 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
                     key={post.slug}
                     onClick={() => handleSelectPost(post)}
                     onMouseEnter={() => setSelectedIndex(index)}
-                    className={`w-full rounded-md px-4 py-3 text-left transition-colors ${
+                    className={`w-full border-2 border-transparent px-4 py-3 text-left transition-colors ${
                       index === selectedIndex
-                        ? 'bg-accent text-accent-foreground'
-                        : 'hover:bg-accent/50'
+                        ? 'border-border bg-accent font-bold text-accent-foreground'
+                        : 'hover:border-border/40'
                     }`}
                   >
                     <div className='font-medium'>{post.title}</div>
@@ -209,18 +209,28 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
           </div>
 
           {/* 快捷键提示 */}
-          <div className='border-t border-border px-4 py-2 text-xs text-muted-foreground'>
+          <div className='border-t-2 border-border px-4 py-2 text-xs text-muted-foreground'>
             <div className='flex items-center gap-4'>
               <span>
-                <kbd className='rounded bg-muted px-1.5 py-0.5'>↑</kbd>
-                <kbd className='ml-1 rounded bg-muted px-1.5 py-0.5'>↓</kbd>
-                {' '}导航
+                <kbd className='border-2 border-border bg-secondary px-1.5 py-0.5'>
+                  ↑
+                </kbd>
+                <kbd className='ml-1 border-2 border-border bg-secondary px-1.5 py-0.5'>
+                  ↓
+                </kbd>{' '}
+                导航
               </span>
               <span>
-                <kbd className='rounded bg-muted px-1.5 py-0.5'>Enter</kbd> 打开
+                <kbd className='border-2 border-border bg-secondary px-1.5 py-0.5'>
+                  Enter
+                </kbd>{' '}
+                打开
               </span>
               <span>
-                <kbd className='rounded bg-muted px-1.5 py-0.5'>Esc</kbd> 关闭
+                <kbd className='border-2 border-border bg-secondary px-1.5 py-0.5'>
+                  Esc
+                </kbd>{' '}
+                关闭
               </span>
             </div>
           </div>

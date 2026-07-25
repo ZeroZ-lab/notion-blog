@@ -1,22 +1,22 @@
 /// <reference types="vite/client" />
-import type { ReactNode } from 'react'
-import {
-  HeadContent,
-  Outlet,
-  Scripts,
-  createRootRoute,
-} from '@tanstack/react-router'
 import '@fontsource/inter/400.css'
 import '@fontsource/inter/500.css'
 import '@fontsource/inter/600.css'
 import '@fontsource/inter/700.css'
+import '../styles/globals.css'
+
+import type { ReactNode } from 'react'
+import {
+  createRootRoute,
+  HeadContent,
+  Outlet,
+  Scripts,
+} from '@tanstack/react-router'
 
 import { Header } from '@/components/header'
 import { Footer } from '@/components/new-footer'
 import { ThemeProvider } from '@/components/theme-provider'
 import { siteConfig } from '@/config/site'
-
-import '../styles/globals.css'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -37,7 +37,7 @@ export const Route = createRootRoute({
     ],
     links: [
       { rel: 'icon', href: '/favicon.ico' },
-      { rel: 'alternate', type: 'application/rss+xml', href: '/feed.xml' },
+      { rel: 'alternate', type: 'application/rss+xml', href: '/feed/xml' },
     ],
   }),
   component: RootComponent,

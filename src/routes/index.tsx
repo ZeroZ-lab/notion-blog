@@ -8,27 +8,25 @@ import { getHomeData } from '@/lib/server-posts'
 export const Route = createFileRoute('/')({
   loader: () => getHomeData(),
   head: () => ({
-    meta: [
-      { title: 'AI关乎未来' },
-    ],
+    meta: [{ title: 'AI关乎未来' }]
   }),
-  component: HomePage,
+  component: HomePage
 })
 
 function HomePage() {
   const data = Route.useLoaderData()
 
   return (
-    <div className='container py-8 max-w-4xl'>
+    <div className='container max-w-4xl py-10'>
       <HeroSection />
 
-      <div className='mt-8'>
-        <h2 className='font-serif text-xl font-semibold tracking-tight text-foreground/80 mb-8'>
+      <div className='mt-14'>
+        <h2 className='mb-8 inline-block -rotate-1 border-4 border-border bg-primary px-4 py-2 text-xl font-black text-primary-foreground shadow-brutal'>
           最新文章
         </h2>
         {data.posts.length > 0 ? (
           <>
-            <div className='grid gap-6 sm:grid-cols-2'>
+            <div className='grid gap-7 sm:grid-cols-2'>
               {data.posts.map((post) => (
                 <PostCard key={post.slug} post={post} />
               ))}
@@ -36,7 +34,7 @@ function HomePage() {
             <Pagination currentPage={1} totalPages={data.totalPages} />
           </>
         ) : (
-          <p className='text-muted-foreground text-center py-20'>
+          <p className='py-20 text-center font-bold text-muted-foreground'>
             暂无文章
           </p>
         )}

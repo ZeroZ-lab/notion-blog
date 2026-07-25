@@ -4,19 +4,19 @@ import { siteConfig } from '@/config/site'
 
 export function Footer() {
   return (
-    <footer className='border-t border-border/40 mt-12'>
-      <div className='container flex flex-col items-center justify-between gap-4 py-10 max-w-4xl md:flex-row md:py-8'>
-        <div className='flex items-center gap-2 text-sm text-muted-foreground'>
+    <footer className='mt-12 border-t-4 border-border'>
+      <div className='container flex max-w-4xl flex-col items-center justify-between gap-4 py-8 md:flex-row'>
+        <div className='flex items-center gap-2 font-mono text-sm font-bold text-muted-foreground'>
           <span>© {new Date().getFullYear()}</span>
-          <span className='text-foreground/50'>·</span>
-          <span className='font-medium text-foreground/70'>{siteConfig.author.name}</span>
+          <span>·</span>
+          <span className='text-foreground'>{siteConfig.author.name}</span>
         </div>
-        <div className='flex items-center space-x-4'>
+        <div className='flex items-center gap-3'>
           <a
             href={siteConfig.links.github}
             target='_blank'
             rel='noreferrer'
-            className='text-muted-foreground/70 hover:text-foreground transition-colors duration-200 p-1'
+            className='border-2 border-border bg-card p-1.5 text-card-foreground shadow-brutal-sm transition-all duration-150 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none'
           >
             <Github className='h-4 w-4' />
             <span className='sr-only'>GitHub</span>
@@ -25,14 +25,14 @@ export function Footer() {
             href={siteConfig.links.twitter}
             target='_blank'
             rel='noreferrer'
-            className='text-muted-foreground/70 hover:text-foreground transition-colors duration-200 p-1'
+            className='border-2 border-border bg-card p-1.5 text-card-foreground shadow-brutal-sm transition-all duration-150 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none'
           >
             <Twitter className='h-4 w-4' />
             <span className='sr-only'>Twitter</span>
           </a>
           <a
-            href='/feed.xml'
-            className='text-muted-foreground/70 hover:text-foreground transition-colors duration-200 text-sm font-medium'
+            href='/feed/xml'
+            className='border-2 border-border bg-card px-2.5 py-1 font-mono text-sm font-bold text-card-foreground shadow-brutal-sm transition-all duration-150 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none'
           >
             RSS
           </a>
