@@ -1,7 +1,7 @@
 import { createFileRoute, notFound } from '@tanstack/react-router'
 
-import { BackToTop } from '@/components/back-to-top'
 import { ArticleEnhancements } from '@/components/article-enhancements'
+import { BackToTop } from '@/components/back-to-top'
 import { ScrollProgress } from '@/components/scroll-progress'
 import { TableOfContents } from '@/components/table-of-contents'
 import { formatPostDate } from '@/lib/post-date'

@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactNode } from 'react'
+import { type ReactNode, useEffect, useRef } from 'react'
 
 // 滚动入场：进入视口时播放一次 brutal-pop
 // 初始 opacity-0 由 CSS [data-reveal] 提供，IntersectionObserver 触发 is-revealed

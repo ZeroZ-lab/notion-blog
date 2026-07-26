@@ -1,6 +1,6 @@
+import { cloudflare } from '@cloudflare/vite-plugin'
 import tailwindcss from '@tailwindcss/vite'
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
-import { cloudflare } from '@cloudflare/vite-plugin'
 import viteReact from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
@@ -18,10 +18,8 @@ export default defineConfig({
       // 避免全量语法包进入 Worker bundle（见 shiki-singleton-shim.ts）
       {
         find: /^shiki$/,
-        replacement: new URL(
-          './src/lib/shiki-singleton-shim.ts',
-          import.meta.url
-        ).pathname
+        replacement: new URL('src/lib/shiki-singleton-shim.ts', import.meta.url)
+          .pathname
       }
     ]
   },

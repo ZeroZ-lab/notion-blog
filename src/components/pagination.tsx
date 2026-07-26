@@ -52,17 +52,17 @@ export function Pagination({ currentPage, totalPages }: PaginationProps) {
 
   return (
     <nav
-      className='mt-16 flex items-center justify-center gap-2'
+      className='mt-16 flex flex-wrap items-center justify-center gap-1 sm:gap-2'
       aria-label='分页导航'
     >
       {/* 上一页 */}
       {currentPage > 1 ? (
         currentPage - 1 === 1 ? (
           <Link to='/' className={buttonClass} aria-label='上一页'>
-            <span className='mr-1 inline-block group-hover:animate-brutal-bounce-x'>
+            <span className='inline-block group-hover:animate-brutal-bounce-x sm:mr-1'>
               ←
             </span>
-            上一页
+            <span className='hidden sm:inline'>上一页</span>
           </Link>
         ) : (
           <Link
@@ -71,18 +71,20 @@ export function Pagination({ currentPage, totalPages }: PaginationProps) {
             className={buttonClass}
             aria-label='上一页'
           >
-            <span className='mr-1 inline-block group-hover:animate-brutal-bounce-x'>
+            <span className='inline-block group-hover:animate-brutal-bounce-x sm:mr-1'>
               ←
             </span>
-            上一页
+            <span className='hidden sm:inline'>上一页</span>
           </Link>
         )
       ) : (
-        <span className={disabledClass}>← 上一页</span>
+        <span className={disabledClass}>
+          ← <span className='hidden sm:inline'>上一页</span>
+        </span>
       )}
 
       {/* 页码 */}
-      <div className='mx-2 flex items-center gap-2'>
+      <div className='mx-1 flex items-center gap-1 sm:mx-2 sm:gap-2'>
         {pageNumbers.map((page, index) => {
           if (page === 'ellipsis') {
             return (
@@ -98,7 +100,7 @@ export function Pagination({ currentPage, totalPages }: PaginationProps) {
           const isCurrentPage = page === currentPage
           const pageClass = cn(
             buttonClass,
-            'min-w-10 text-center tabular-nums',
+            'min-w-8 px-1.5 text-center tabular-nums sm:min-w-10 sm:px-3',
             isCurrentPage && 'bg-primary text-primary-foreground'
           )
 
@@ -139,13 +141,15 @@ export function Pagination({ currentPage, totalPages }: PaginationProps) {
           className={buttonClass}
           aria-label='下一页'
         >
-          下一页
-          <span className='ml-1 inline-block group-hover:animate-brutal-bounce-x'>
+          <span className='hidden sm:inline'>下一页</span>
+          <span className='inline-block group-hover:animate-brutal-bounce-x sm:ml-1'>
             →
           </span>
         </Link>
       ) : (
-        <span className={disabledClass}>下一页 →</span>
+        <span className={disabledClass}>
+          <span className='hidden sm:inline'>下一页</span> →
+        </span>
       )}
     </nav>
   )

@@ -28,14 +28,16 @@ export function ArticleEnhancements({ html }: { html: string }) {
         { rootMargin: '0px 0px -8% 0px', threshold: 0.05 }
       )
       for (const h of headings) {
-        h.setAttribute('data-reveal', '')
+        h.dataset.reveal = ''
         io.observe(h)
       }
     }
 
     // --- 代码块复制按钮 ---
     const cleanups: Array<() => void> = []
-    const pres = Array.from(container.querySelectorAll<HTMLElement>('.prose pre'))
+    const pres = Array.from(
+      container.querySelectorAll<HTMLElement>('.prose pre')
+    )
     for (const pre of pres) {
       // 挂载点：优先 pretty-code 的 figure，否则包一层 div
       const figure = pre.closest<HTMLElement>(
@@ -52,7 +54,7 @@ export function ArticleEnhancements({ html }: { html: string }) {
       btn.setAttribute('aria-label', '复制代码')
       const onClick = async () => {
         try {
-          await navigator.clipboard.writeText(pre.innerText)
+          await navigator.clipboard.writeText(pre.textContent ?? '')
           btn.textContent = '已复制 ✓'
           btn.classList.add('copied')
           window.setTimeout(() => {
@@ -67,14 +69,14 @@ export function ArticleEnhancements({ html }: { html: string }) {
         }
       }
       btn.addEventListener('click', onClick)
-      anchor.appendChild(btn)
+      anchor.append(btn)
       cleanups.push(() => btn.remove())
     }
 
     return () => {
       io?.disconnect()
       for (const h of headings) {
-        h.removeAttribute('data-reveal')
+        delete h.dataset.reveal
         h.classList.remove('is-revealed')
       }
       for (const cleanup of cleanups) cleanup()
