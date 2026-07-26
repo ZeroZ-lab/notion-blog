@@ -14,7 +14,7 @@
     "dev": "vite dev",
     "build": "node scripts/generate-search-index.mjs && vite build",
     "preview": "vite preview",
-    "deploy": "pnpm build && wrangler pages deploy dist/client",
+    "deploy": "pnpm build && wrangler deploy",
     "generate-search-index": "node scripts/generate-search-index.mjs",
     "test": "run-p test:*",
     "test:lint": "eslint .",
@@ -43,6 +43,7 @@
     "unified": "^11.0.5"
   },
   "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.47.0",
     "@fisch0920/config": "^1.2.1",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.1.18",
@@ -60,7 +61,7 @@
     "typescript": "^5.9.2",
     "vite": "^7.3.5",
     "vite-tsconfig-paths": "^5.1.4",
-    "wrangler": "^4.20.5"
+    "wrangler": "^4.114.0"
   },
   "prettier": "@fisch0920/config/prettier",
   "simple-git-hooks": {

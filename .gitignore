@@ -46,3 +46,4 @@ yarn-error.log*
 
 # TanStack Start generated route tree (regenerated on dev)
 src/routeTree.gen.ts
+src/lib/generated/
