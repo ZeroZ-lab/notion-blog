@@ -25,9 +25,12 @@ export function Header() {
   return (
     <>
       <header className='sticky top-0 z-50 w-full border-b-4 border-border bg-background'>
-        <div className='container flex h-16 items-center max-w-4xl'>
-          <div className='mr-4 flex'>
-            <Link to='/' className='group mr-8 flex items-center space-x-2.5'>
+        <div className='container flex min-h-16 flex-wrap items-center gap-y-2 py-2 max-w-4xl md:h-16 md:flex-nowrap md:py-0'>
+          <div className='contents md:mr-4 md:flex'>
+            <Link
+              to='/'
+              className='group flex items-center space-x-2.5 md:mr-8'
+            >
               <div className='flex h-8 w-8 items-center justify-center border-2 border-border bg-accent shadow-brutal-sm group-hover:animate-brutal-tada'>
                 <span className='text-sm font-black text-white'>AI</span>
               </div>
@@ -35,7 +38,7 @@ export function Header() {
                 {siteConfig.name}
               </span>
             </Link>
-            <nav className='flex items-center space-x-2 text-sm'>
+            <nav className='order-last flex w-full items-center space-x-2 text-sm md:order-none md:w-auto'>
               <Link
                 to='/'
                 className='border-2 border-transparent px-3 py-1.5 font-bold text-foreground/70 transition-all hover:border-border hover:text-foreground hover:shadow-brutal-sm'
@@ -47,6 +50,14 @@ export function Header() {
               >
                 首页
               </Link>
+              <a
+                href='https://ai-city.zerozzz.win/'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='whitespace-nowrap border-2 border-transparent px-3 py-1.5 font-bold text-foreground/70 transition-all hover:border-border hover:text-foreground hover:shadow-brutal-sm'
+              >
+                AI City
+              </a>
             </nav>
           </div>
           <div className='flex flex-1 items-center justify-end space-x-2'>
